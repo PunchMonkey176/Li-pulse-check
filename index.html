@@ -42,14 +42,20 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .bar-fill{height:100%;border-radius:5px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600;color:#fff;transition:width .4s}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;padding:7px 8px;color:var(--dim);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--bd);background:var(--sf)}
+th.grp-risk{background:#fef2f2;color:var(--red)}
+th.grp-sales{background:var(--grn-bg);color:var(--grn)}
 td{padding:7px 8px;border-bottom:1px solid var(--sf2);vertical-align:top}
+td.grp-risk{background:#fffbfb}
+td.grp-sales{background:#f7fdf9}
 tr:hover td{background:#f8f9fb}
+tr:hover td.grp-risk{background:#fef5f5}
+tr:hover td.grp-sales{background:#f0faf4}
 .ei{background:transparent;border:1px solid transparent;color:var(--tx);font-family:inherit;font-size:13px;padding:4px 6px;border-radius:6px;width:100%;outline:none;resize:vertical}
 .ei:hover{border-color:var(--bd)}
 .ei:focus{border-color:var(--acc);background:#f8faff}
 .sc-sel{border:1px solid var(--bd);font-weight:700;font-size:13px;padding:4px 2px;border-radius:6px;width:40px;text-align:center;cursor:pointer;outline:none}
 .sc-sel:focus{border-color:var(--acc)}
-.date-in{background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-family:inherit;font-size:13px;padding:4px 6px;border-radius:6px;width:120px;outline:none}
+.date-in{background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-family:inherit;font-size:12px;padding:4px 6px;border-radius:6px;width:125px;outline:none}
 .date-in:focus{border-color:var(--acc)}
 .add-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border:1px dashed var(--bd);border-radius:8px;color:var(--dim);font-size:12px;cursor:pointer;background:transparent;margin-top:8px;font-family:inherit}
 .add-btn:hover{border-color:var(--acc);color:var(--acc);background:#eff6ff}
@@ -61,11 +67,9 @@ tr:hover td{background:#f8f9fb}
 .toast.on{opacity:1;transform:translateY(0)}
 .hot-item{font-size:11px;color:var(--dim);padding:2px 0}
 .hot-dot{color:var(--yel);margin-right:5px}
-.risk-item{padding:8px 0;border-bottom:1px solid var(--sf2)}
-.risk-item:last-child{border-bottom:none}
 .legend{font-size:11px;color:var(--dim);display:flex;gap:14px;margin-top:4px}
 .legend-dot{display:inline-block;width:22px;height:22px;border-radius:5px;text-align:center;line-height:22px;font-size:11px;font-weight:700;margin-right:4px}
-.upd-badge{font-size:10px;color:var(--dim);background:var(--sf2);padding:2px 6px;border-radius:4px;margin-left:6px}
+.upd-badge{font-size:10px;color:var(--dim);background:var(--sf2);padding:2px 6px;border-radius:4px}
 @media(max-width:768px){.grid2{grid-template-columns:1fr}.hg{grid-template-columns:repeat(3,1fr)}.hdr{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
@@ -74,38 +78,37 @@ tr:hover td{background:#f8f9fb}
 <div class="toast" id="toast">✓ Saved</div>
 
 <script>
-const SK="pulse-v6";
+const SK="pulse-v7";
 const HF=["contracts","financials","delivery","blendTeam","clientSat","engagement"];
 const HL=["Contracts","Financials","Delivery","Blend Team","Client Sat","Engagement"];
 const PPL=["Ankit","Charlie","Ryan"];
 
 const DD={people:{
 Ankit:{projects:[
-{id:"a1",name:"LinkedIn MIDA - Datawatch",lp:"Paul",dl:"Ankit Agarwal",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Claude Access is pending",risks:"",mit:"Jenee moving engineers to her org by EOW",sales:"",notes:""},
-{id:"a2",name:"Trust Project Sanket",lp:"Sanket",dl:"Ankit Agarwal",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Bangalore office incident",risks:"",mit:"",sales:"AI Workshop planned for March 17",notes:""}
+{id:"a1",name:"LinkedIn MIDA - Datawatch",lp:"Paul",dl:"Ankit Agarwal",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Claude Access is pending",risks:"",mit:"Jenee moving engineers to her org by EOW",mitDue:"",sales:"",notes:""},
+{id:"a2",name:"Trust Project Sanket",lp:"Sanket",dl:"Ankit Agarwal",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Bangalore office incident",risks:"",mit:"",mitDue:"",sales:"AI Workshop planned for March 17",notes:""}
 ]},
 Charlie:{projects:[
-{id:"c1",name:"LinkedIn CGI FY26 CO2",lp:"Leo Pedraza/Mimi",dl:"Charlie Gage",contracts:2,financials:3,delivery:3,blendTeam:2,clientSat:3,engagement:2,upd:"2026-03-17",hot:"Renewal time",risks:"Adithya is on an island",mit:"",sales:"",notes:"Need to check on renewal"},
-{id:"c2",name:"LTS BI FY2025Q1 (Ileana) CO7",lp:"Ileana",dl:"Charlie Gage/David Salcedo",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",sales:"",notes:"Need to TB with David S"},
-{id:"c3",name:"LinkedIn MIDA - Targeting",lp:"Rajni/Irene",dl:"Charlie Gage/Yugdeep",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",sales:"",notes:""},
-{id:"c4",name:"LinkedIn MIDA - Datavision",lp:"Laura/Marco",dl:"Charlie/Yugdeep/Eric",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"",risks:"",mit:"",sales:"",notes:""}
+{id:"c1",name:"LinkedIn CGI FY26 CO2",lp:"Leo Pedraza/Mimi",dl:"Charlie Gage",contracts:2,financials:3,delivery:3,blendTeam:2,clientSat:3,engagement:2,upd:"2026-03-17",hot:"Renewal time",risks:"Adithya is on an island",mit:"",mitDue:"",sales:"",notes:"Need to check on renewal"},
+{id:"c2",name:"LTS BI FY2025Q1 (Ileana) CO7",lp:"Ileana",dl:"Charlie Gage/David Salcedo",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:"Need to TB with David S"},
+{id:"c3",name:"LinkedIn MIDA - Targeting",lp:"Rajni/Irene",dl:"Charlie Gage/Yugdeep",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""},
+{id:"c4",name:"LinkedIn MIDA - Datavision",lp:"Laura/Marco",dl:"Charlie/Yugdeep/Eric",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""}
 ]},
 Ryan:{projects:[
-{id:"r1",name:"LinkedIn MIDA - Measurement",lp:"Zaid/Erica",dl:"Ryan Ottino",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Updating prioritizations for FY27",risks:"SEO data sent to AP was incomplete",mit:"Analyzing impact",sales:"In-housing MMM",notes:""},
-{id:"r2",name:"LTV Work",lp:"Licurgo",dl:"David Salcedo",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Bug found in NN build. Requires DS troubleshooting",risks:"",mit:"Zaid and Paolo rescoping project",sales:"CRM lifecycle workshop",notes:""},
-{id:"r3",name:"Incremental Testing",lp:"Faye",dl:"Ryan Ottino",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",sales:"",notes:""}
+{id:"r1",name:"LinkedIn MIDA - Measurement",lp:"Zaid/Erica",dl:"Ryan Ottino",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Updating prioritizations for FY27",risks:"SEO data sent to AP was incomplete",mit:"Analyzing impact",mitDue:"",sales:"In-housing MMM",notes:""},
+{id:"r2",name:"LTV Work",lp:"Licurgo",dl:"David Salcedo",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Bug found in NN build. Requires DS troubleshooting",risks:"",mit:"Zaid and Paolo rescoping project",mitDue:"",sales:"CRM lifecycle workshop",notes:""},
+{id:"r3",name:"Incremental Testing",lp:"Faye",dl:"Ryan Ottino",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""}
 ]}
 },
 riskTracker:[
-{id:"rk1",owner:"Charlie",desc:"Possible Attrition - XYZ",level:"High",impact:"Affects Project Delivery",mitigation:"KT/Documentation etc",mitDue:"",notes:""},
-{id:"rk2",owner:"Ryan",desc:"",level:"Medium",impact:"",mitigation:"",mitDue:"",notes:""},
-{id:"rk3",owner:"Ankit",desc:"",level:"Low",impact:"",mitigation:"",mitDue:"",notes:""}
+{id:"rk1",owner:"Charlie",project:"",desc:"Possible Attrition - XYZ",level:"High",impact:"Affects Project Delivery",mitigation:"KT/Documentation etc",mitDue:"",notes:"",_src:""},
+{id:"rk2",owner:"Ryan",project:"",desc:"",level:"Medium",impact:"",mitigation:"",mitDue:"",notes:"",_src:""},
+{id:"rk3",owner:"Ankit",project:"",desc:"",level:"Low",impact:"",mitigation:"",mitDue:"",notes:"",_src:""}
 ],
+salesPlays:[],
 recognitions:[
 {id:"rc1",date:"Feb",name:"VJ",from:"Client Feedback (Rajni and Kaylee)",ctx:"Incredible partner on Large Hire Learning Week campaigns. Strong communicator and reliable resource through ad hoc targeting investigations."},
 {id:"rc2",date:"Feb",name:"Dharmendra",from:"Client Feedback (Shruti)",ctx:"Outstanding leadership as Sr. Engineering Data Scientist. Leading multiple projects with clarity and strong execution discipline."}
-],
-salesPlays:[
 ]};
 
 let data,tab="dash",exRec={};
@@ -122,34 +125,63 @@ const av=(a,f)=>a.length?a.reduce((s,p)=>s+(p[f]||0),0)/a.length:0;
 const today=()=>new Date().toISOString().slice(0,10);
 
 function allP(){const r=[];PPL.forEach(p=>data.people[p].projects.forEach(pr=>r.push({...pr,owner:p})));return r;}
-function salesFS(){return allP().filter(p=>p.sales?.trim());}
-function risksFS(){return allP().filter(p=>p.risks?.trim());}
 
-function setTab(t){tab=t;render();}
-
-// Collect all risks (tracker + workstreams) into one unified list for risk tracker
-function allRisks(){
-  const risks=[...data.riskTracker];
-  return risks;
-}
-
-// Move workstream risks into riskTracker on first load or when syncing
-function syncWorkstreamRisks(){
-  const rf=risksFS();
-  rf.forEach(r=>{
-    const key=r.owner+":"+r.name+":"+r.risks;
-    const exists=data.riskTracker.some(rt=>rt._srcKey===key);
-    if(!exists){
-      data.riskTracker.push({id:uid(),owner:r.owner,desc:r.risks+" ("+r.name+")",level:"Medium",impact:"",mitigation:r.mit||"",mitDue:"",notes:"",_srcKey:key});
-    }
+// Sync: workstream risks -> riskTracker
+function syncRisks(){
+  PPL.forEach(who=>{
+    data.people[who].projects.forEach(p=>{
+      if(!p.risks||!p.risks.trim())return;
+      const srcKey=who+"|"+p.id;
+      let existing=data.riskTracker.find(r=>r._src===srcKey);
+      if(!existing){
+        data.riskTracker.push({id:uid(),owner:who,project:p.name,desc:p.risks,level:"Medium",impact:"",mitigation:p.mit||"",mitDue:p.mitDue||"",notes:"",_src:srcKey});
+      } else {
+        existing.desc=p.risks;
+        existing.project=p.name;
+        existing.mitigation=p.mit||existing.mitigation;
+        existing.mitDue=p.mitDue||existing.mitDue;
+      }
+    });
   });
 }
-syncWorkstreamRisks();
+
+// Sync: workstream sales -> salesPlays
+function syncSales(){
+  PPL.forEach(who=>{
+    data.people[who].projects.forEach(p=>{
+      if(!p.sales||!p.sales.trim())return;
+      const srcKey=who+"|"+p.id+"|sales";
+      let existing=data.salesPlays.find(s=>s._src===srcKey);
+      if(!existing){
+        data.salesPlays.push({id:uid(),owner:who,project:p.name,client:"",opp:p.sales,desc:"",status:"Identified",next:"",notes:"",lastUpd:p.upd||today(),_src:srcKey});
+      } else {
+        existing.opp=p.sales;
+        existing.project=p.name;
+        existing.lastUpd=p.upd||today();
+      }
+    });
+  });
+}
+
+// Sync risk mitigation/due back from workstream to risk tracker
+function syncMitBack(who,projIdx){
+  const p=data.people[who].projects[projIdx];
+  const srcKey=who+"|"+p.id;
+  const rt=data.riskTracker.find(r=>r._src===srcKey);
+  if(rt){
+    rt.mitigation=p.mit||"";
+    rt.mitDue=p.mitDue||"";
+  }
+}
+
+syncRisks();syncSales();
+
+function setTab(t){tab=t;render();}
 
 function render(){
 const ap=document.getElementById("app");
 const wk=new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
-let h=`<div class="hdr"><h1>LinkedIn <span>Delivery Pulse Check</span> 2026</h1><div class="hdr-r"><span class="wk">Week of ${wk}</span><button class="rst" onclick="if(confirm('Reset all data?')){data=JSON.parse(JSON.stringify(DD));sv();render();}">Reset</button></div></div>`;
+let h=`<div class="hdr"><h1>LinkedIn <span>Delivery Pulse Check</span> 2026</h1><div class="hdr-r"><span class="wk">Week of ${wk}</span><button class="rst" onclick="if(confirm('Reset all data to defaults?')){data=JSON.parse(JSON.stringify(DD));sv();render();}">Reset</button></div></div>`;
 
 const tabs=[{id:"dash",l:"◉ Dashboard"},{id:"sales",l:"$ Sales Plays"},{id:"risks",l:"⚠ Risk Tracker"},
 {id:"Ankit",l:"Ankit",p:1},{id:"Charlie",l:"Charlie",p:1},{id:"Ryan",l:"Ryan",p:1},{id:"rec",l:"★ Recognition"}];
@@ -168,13 +200,12 @@ function renderDash(){
 const ap=allP(),avgs=HF.map(f=>av(ap,f)),ov=avgs.reduce((a,b)=>a+b,0)/avgs.length;
 const rc={High:0,Medium:0,Low:0};data.riskTracker.forEach(r=>{if(r.desc&&r.level)rc[r.level]++;});
 const tR=data.riskTracker.filter(r=>r.desc).length;
-const sf=salesFS();
 
 let h=`<div class="grid4">`;
-[[`Account Health`,ov.toFixed(2),scr(ov),`of 3.00 · ${ap.length} projects`],
-[`Projects`,ap.length,`#2563eb`,`across 3 leads`],
-[`Active Risks`,tR,`#dc2626`,`${rc.High}H · ${rc.Medium}M · ${rc.Low}L`],
-[`Sales Opps`,sf.length+(data.salesPlays||[]).length,`#059669`,`from workstreams + manual`]].forEach(([l,v,c,s])=>{
+[["Account Health",ov.toFixed(2),scr(ov),`of 3.00 · ${ap.length} projects`],
+["Projects",ap.length,"#2563eb","across 3 leads"],
+["Active Risks",tR,"#dc2626",`${rc.High}H · ${rc.Medium}M · ${rc.Low}L`],
+["Sales Opps",data.salesPlays.length,"#059669","tracked opportunities"]].forEach(([l,v,c,s])=>{
 h+=`<div class="card"><div class="sl">${l}</div><div class="sv" style="color:${c}">${v}</div><div class="ss">${s}</div></div>`;
 });
 h+=`</div>`;
@@ -207,17 +238,28 @@ let h=`<div class="card"><div class="ct"><span class="dot" style="background:var
 HF.forEach((f,i)=>{h+=`<div class="hi"><span class="l">${HL[i]}</span><span class="v" style="color:${scc(pa[i])}">${pa[i].toFixed(2)}</span></div>`;});
 h+=`</div></div>`;
 
-h+=`<div class="card"><div class="ct"><span class="dot" style="background:var(--acc)"></span>Projects (${d2.projects.length})</div><div style="overflow-x:auto"><table><thead><tr><th>Project</th><th>LI Partner</th><th>DL</th>`;
+h+=`<div class="card"><div class="ct"><span class="dot" style="background:var(--acc)"></span>Projects (${d2.projects.length})</div><div style="overflow-x:auto"><table><thead><tr>`;
+h+=`<th>Project</th><th>LI Partner</th><th>DL</th>`;
 HL.forEach(l=>{h+=`<th style="text-align:center;min-width:48px">${l}</th>`;});
-h+=`<th>Updated</th><th>Hot Topics</th><th>Risks</th><th>Mitigation</th><th>Sales Plays</th><th>Notes</th><th></th></tr></thead><tbody>`;
+h+=`<th>Updated</th><th>Hot Topics</th>`;
+h+=`<th class="grp-risk">Risk</th><th class="grp-risk">Mitigation</th><th class="grp-risk">Mit. Due</th>`;
+h+=`<th class="grp-sales">Sales Plays</th><th>Notes</th><th></th></tr></thead><tbody>`;
 
 d2.projects.forEach((p,i)=>{
-h+=`<tr><td><input class="ei" value="${esc(p.name)}" onchange="uP('${who}',${i},'name',this.value)" style="min-width:130px"></td>`;
+h+=`<tr>`;
+h+=`<td><input class="ei" value="${esc(p.name)}" onchange="uP('${who}',${i},'name',this.value)" style="min-width:130px"></td>`;
 h+=`<td><input class="ei" value="${esc(p.lp)}" onchange="uP('${who}',${i},'lp',this.value)" style="min-width:80px"></td>`;
 h+=`<td><input class="ei" value="${esc(p.dl)}" onchange="uP('${who}',${i},'dl',this.value)" style="min-width:80px"></td>`;
 HF.forEach(f=>{h+=`<td style="text-align:center"><select class="sc-sel" style="background:${scbg(p[f])};color:${scr(p[f])}" onchange="uP('${who}',${i},'${f}',+this.value)"><option value="1"${p[f]===1?" selected":""}>1</option><option value="2"${p[f]===2?" selected":""}>2</option><option value="3"${p[f]===3?" selected":""}>3</option></select></td>`;});
 h+=`<td><span class="upd-badge">${esc(p.upd)||"—"}</span></td>`;
-["hot","risks","mit","sales","notes"].forEach(f=>{h+=`<td><textarea class="ei" onchange="uP('${who}',${i},'${f}',this.value)" style="min-width:100px">${esc(p[f])}</textarea></td>`;});
+h+=`<td><textarea class="ei" onchange="uP('${who}',${i},'hot',this.value)" style="min-width:100px">${esc(p.hot)}</textarea></td>`;
+// Risk block (grouped)
+h+=`<td class="grp-risk"><textarea class="ei" onchange="uP('${who}',${i},'risks',this.value)" style="min-width:110px">${esc(p.risks)}</textarea></td>`;
+h+=`<td class="grp-risk"><textarea class="ei" onchange="uP('${who}',${i},'mit',this.value)" style="min-width:110px">${esc(p.mit)}</textarea></td>`;
+h+=`<td class="grp-risk"><input type="date" class="date-in" value="${esc(p.mitDue)}" onchange="uP('${who}',${i},'mitDue',this.value)"></td>`;
+// Sales
+h+=`<td class="grp-sales"><textarea class="ei" onchange="uP('${who}',${i},'sales',this.value)" style="min-width:110px">${esc(p.sales)}</textarea></td>`;
+h+=`<td><textarea class="ei" onchange="uP('${who}',${i},'notes',this.value)" style="min-width:80px">${esc(p.notes)}</textarea></td>`;
 h+=`<td><button class="del-btn" onclick="rP('${who}',${i})">✕</button></td></tr>`;
 });
 h+=`</tbody></table></div><button class="add-btn" onclick="aP('${who}')">+ Add Project</button></div>`;
@@ -226,38 +268,41 @@ return h;
 }
 
 function renderSales(){
-const sf=salesFS();
-let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--grn)"></span>Sales from Workstreams</div>`;
-if(!sf.length)h+=`<div style="color:var(--dim);font-size:13px;padding:8px 0">No sales plays from workstreams yet — add them in the individual tabs</div>`;
-else{
-h+=`<table><thead><tr><th>Owner</th><th>Project</th><th>Opportunity</th><th>Updated</th></tr></thead><tbody>`;
-sf.forEach(s=>{h+=`<tr><td><strong>${esc(s.owner)}</strong></td><td>${esc(s.name)}</td><td>${esc(s.sales)}</td><td>${esc(s.upd)||"—"}</td></tr>`;});
-h+=`</tbody></table>`;}
-h+=`</div>`;
-
-h+=`<div class="card"><div class="ct"><span class="dot" style="background:var(--acc)"></span>Sales Plays Tracker</div><div style="overflow-x:auto"><table><thead><tr><th>Client/BU</th><th>Opportunity</th><th>Description</th><th>Status</th><th>Next Steps</th><th>Notes</th><th>Last Updated</th><th></th></tr></thead><tbody>`;
-(data.salesPlays||[]).forEach((sp,i)=>{
-h+=`<tr><td><input class="ei" value="${esc(sp.client)}" onchange="uSP(${i},'client',this.value)"></td>`;
-h+=`<td><input class="ei" value="${esc(sp.opp)}" onchange="uSP(${i},'opp',this.value)"></td>`;
-h+=`<td><textarea class="ei" onchange="uSP(${i},'desc',this.value)">${esc(sp.desc)}</textarea></td>`;
-h+=`<td><select class="ei" style="width:100px" onchange="uSP(${i},'status',this.value)"><option${sp.status==="Identified"?" selected":""}>Identified</option><option${sp.status==="In Progress"?" selected":""}>In Progress</option><option${sp.status==="Proposal Sent"?" selected":""}>Proposal Sent</option><option${sp.status==="Won"?" selected":""}>Won</option><option${sp.status==="Lost"?" selected":""}>Lost</option></select></td>`;
-h+=`<td><textarea class="ei" onchange="uSP(${i},'next',this.value)">${esc(sp.next)}</textarea></td>`;
-h+=`<td><textarea class="ei" onchange="uSP(${i},'notes',this.value)">${esc(sp.notes)}</textarea></td>`;
-h+=`<td><span class="upd-badge">${esc(sp.lastUpd)||"—"}</span></td>`;
-h+=`<td><button class="del-btn" onclick="rSP(${i})">✕</button></td></tr>`;
-});
+let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--grn)"></span>Sales Plays Tracker</div>`;
+h+=`<div style="font-size:11px;color:var(--dim);margin-bottom:10px">Sales plays from workstream tabs are automatically added here. You can also add new ones manually.</div>`;
+h+=`<div style="overflow-x:auto"><table><thead><tr><th>Owner</th><th>Project</th><th>Opportunity</th><th>Description</th><th>Status</th><th>Next Steps</th><th>Notes</th><th>Updated</th><th></th></tr></thead><tbody>`;
+if(!data.salesPlays.length){
+  h+=`<tr><td colspan="9" style="color:var(--dim)">No sales plays yet — add them in the workstream tabs or manually below</td></tr>`;
+} else {
+  data.salesPlays.forEach((sp,i)=>{
+    h+=`<tr>`;
+    h+=`<td><input class="ei" value="${esc(sp.owner)}" onchange="uSP(${i},'owner',this.value)" style="min-width:70px"></td>`;
+    h+=`<td><input class="ei" value="${esc(sp.project)}" onchange="uSP(${i},'project',this.value)" style="min-width:100px"></td>`;
+    h+=`<td><input class="ei" value="${esc(sp.opp)}" onchange="uSP(${i},'opp',this.value)" style="min-width:120px"></td>`;
+    h+=`<td><textarea class="ei" onchange="uSP(${i},'desc',this.value)" style="min-width:110px">${esc(sp.desc)}</textarea></td>`;
+    h+=`<td><select class="ei" style="width:110px" onchange="uSP(${i},'status',this.value)">`;
+    ["Identified","In Progress","Proposal Sent","Won","Lost"].forEach(st=>{h+=`<option${sp.status===st?" selected":""}>${st}</option>`;});
+    h+=`</select></td>`;
+    h+=`<td><textarea class="ei" onchange="uSP(${i},'next',this.value)" style="min-width:100px">${esc(sp.next)}</textarea></td>`;
+    h+=`<td><textarea class="ei" onchange="uSP(${i},'notes',this.value)" style="min-width:90px">${esc(sp.notes)}</textarea></td>`;
+    h+=`<td><span class="upd-badge">${esc(sp.lastUpd)||"—"}</span></td>`;
+    h+=`<td><button class="del-btn" onclick="rSP(${i})">✕</button></td></tr>`;
+  });
+}
 h+=`</tbody></table></div><button class="add-btn" onclick="aSP()">+ Add Sales Play</button></div>`;
 return h;
 }
 
 function renderRisks(){
 let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--red)"></span>Risk Tracker</div>`;
-h+=`<div style="font-size:11px;color:var(--dim);margin-bottom:10px">Includes risks from workstream tabs and manually added risks</div>`;
-h+=`<div style="overflow-x:auto"><table><thead><tr><th>Owner</th><th>Description</th><th>Level</th><th>Impact</th><th>Mitigation</th><th>Mit. Due Date</th><th>Notes</th><th></th></tr></thead><tbody>`;
+h+=`<div style="font-size:11px;color:var(--dim);margin-bottom:10px">Risks from workstream tabs are automatically synced here. Mitigation and due dates stay in sync.</div>`;
+h+=`<div style="overflow-x:auto"><table><thead><tr><th>Owner</th><th>Project</th><th>Description</th><th>Level</th><th>Impact</th><th>Mitigation</th><th>Mit. Due</th><th>Notes</th><th></th></tr></thead><tbody>`;
 data.riskTracker.forEach((r,i)=>{
 const lv=r.level==="High"?1:r.level==="Medium"?2:3;
-h+=`<tr><td><input class="ei" value="${esc(r.owner)}" onchange="uR(${i},'owner',this.value)" style="min-width:70px"></td>`;
-h+=`<td><textarea class="ei" onchange="uR(${i},'desc',this.value)" style="min-width:140px">${esc(r.desc)}</textarea></td>`;
+h+=`<tr>`;
+h+=`<td><input class="ei" value="${esc(r.owner)}" onchange="uR(${i},'owner',this.value)" style="min-width:70px"></td>`;
+h+=`<td><input class="ei" value="${esc(r.project)}" onchange="uR(${i},'project',this.value)" style="min-width:100px"></td>`;
+h+=`<td><textarea class="ei" onchange="uR(${i},'desc',this.value)" style="min-width:150px">${esc(r.desc)}</textarea></td>`;
 h+=`<td><select class="sc-sel" style="width:82px;background:${scbg(lv)};color:${scr(lv)}" onchange="uR(${i},'level',this.value)"><option${r.level==="High"?" selected":""}>High</option><option${r.level==="Medium"?" selected":""}>Medium</option><option${r.level==="Low"?" selected":""}>Low</option></select></td>`;
 h+=`<td><textarea class="ei" onchange="uR(${i},'impact',this.value)" style="min-width:110px">${esc(r.impact)}</textarea></td>`;
 h+=`<td><textarea class="ei" onchange="uR(${i},'mitigation',this.value)" style="min-width:120px">${esc(r.mitigation)}</textarea></td>`;
@@ -282,26 +327,35 @@ h+=`<div class="card"><div class="ct">Add Recognition</div><div style="display:g
 return h;
 }
 
-// MUTATIONS - Person projects (auto-update date on any change)
+// === MUTATIONS ===
+
+// Person project update — auto-date, sync risks+sales+mitigation
 function uP(who,i,f,v){
   data.people[who].projects[i][f]=v;
-  if(f!=="upd"){data.people[who].projects[i].upd=today();}
-  // Sync risks from workstreams
-  syncWorkstreamRisks();
+  if(f!=="upd") data.people[who].projects[i].upd=today();
+  // If risk/mit/mitDue changed, sync to risk tracker
+  if(f==="risks"||f==="mit"||f==="mitDue"||f==="name"){
+    syncRisks();
+    syncMitBack(who,i);
+  }
+  // If sales changed, sync to sales tracker
+  if(f==="sales"||f==="name"){
+    syncSales();
+  }
   sv();
   if(HF.includes(f))render();
 }
-function aP(who){data.people[who].projects.push({id:uid(),name:"New Project",lp:"",dl:"",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:today(),hot:"",risks:"",mit:"",sales:"",notes:""});sv();render();}
+function aP(who){data.people[who].projects.push({id:uid(),name:"New Project",lp:"",dl:"",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:today(),hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""});sv();render();}
 function rP(who,i){if(!confirm("Remove this project?"))return;data.people[who].projects.splice(i,1);sv();render();}
 
 // Risk tracker
 function uR(i,f,v){data.riskTracker[i][f]=v;sv();}
-function aR(){data.riskTracker.push({id:uid(),owner:"",desc:"",level:"Medium",impact:"",mitigation:"",mitDue:"",notes:""});sv();render();}
+function aR(){data.riskTracker.push({id:uid(),owner:"",project:"",desc:"",level:"Medium",impact:"",mitigation:"",mitDue:"",notes:"",_src:""});sv();render();}
 function rR(i){if(!confirm("Remove?"))return;data.riskTracker.splice(i,1);sv();render();}
 
-// Sales plays (auto-update date on any change)
+// Sales plays
 function uSP(i,f,v){data.salesPlays[i][f]=v;data.salesPlays[i].lastUpd=today();sv();}
-function aSP(){data.salesPlays.push({id:uid(),client:"",opp:"",desc:"",status:"Identified",next:"",notes:"",lastUpd:today()});sv();render();}
+function aSP(){data.salesPlays.push({id:uid(),owner:"",project:"",opp:"",desc:"",status:"Identified",next:"",notes:"",lastUpd:today(),_src:""});sv();render();}
 function rSP(i){if(!confirm("Remove?"))return;data.salesPlays.splice(i,1);sv();render();}
 
 // Recognitions
