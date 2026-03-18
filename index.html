@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkedIn Delivery Pulse Check 2026</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0b0d13;--sf:#12151e;--sf2:#181c28;--bd:#1c2030;--tx:#dde0ec;--dim:#5a6080;--acc:#4c8df5;--grn:#34d399;--yel:#fbbf24;--red:#f87171;--prp:#a78bfa}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+.app{max-width:1400px;margin:0 auto;padding:0 16px 40px}
+.hdr{padding:18px 0 14px;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;border-bottom:1px solid var(--bd)}
+.hdr h1{font-size:24px;font-weight:300;letter-spacing:-.5px}
+.hdr h1 span{color:var(--acc);font-weight:600}
+.hdr-r{display:flex;gap:6px;align-items:center}
+.wk{font-size:11px;color:var(--dim);background:var(--sf);padding:5px 12px;border-radius:7px;border:1px solid var(--bd)}
+.rst{font-size:11px;color:var(--red);background:#1a1215;padding:5px 12px;border-radius:7px;border:1px solid #2a1a1a;cursor:pointer;font-family:inherit}
+.tabs{display:flex;gap:3px;padding:14px 0 18px;overflow-x:auto}
+.tab{padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:400;color:var(--dim);background:transparent;border:none;border-left:none;transition:all .15s;white-space:nowrap;user-select:none;font-family:inherit}
+.tab:hover{color:var(--tx)}
+.tab.on{font-weight:600;color:#fff;background:var(--acc)}
+.tab.p{border-left:3px solid var(--prp)}
+.tab.p.on{border-left-color:#fff}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.card.click{cursor:pointer;transition:border-color .15s}
+.card.click:hover{border-color:var(--acc)}
+.ct{font-size:12px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.sl{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.sv{font-size:34px;font-weight:200;letter-spacing:-1px}
+.ss{font-size:11px;color:#3a3f55;margin-top:2px}
+.hg{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+.hi{text-align:center;padding:8px 2px;background:#0a0c12;border-radius:8px}
+.hi .l{display:block;font-size:9px;color:var(--dim);margin-bottom:3px}
+.hi .v{font-size:22px;font-weight:300}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.bar-lbl{width:80px;font-size:11px;color:var(--dim);text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:22px;background:var(--sf2);border-radius:5px;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600;color:#000;transition:width .4s}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:7px 8px;color:var(--dim);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bd);background:var(--sf)}
+td{padding:7px 8px;border-bottom:1px solid #151925;vertical-align:top}
+.ei{background:transparent;border:1px solid transparent;color:var(--tx);font-family:inherit;font-size:13px;padding:4px 6px;border-radius:6px;width:100%;outline:none;resize:vertical}
+.ei:focus{border-color:var(--acc);background:var(--sf2)}
+.sc-sel{border:1px solid var(--bd);font-weight:700;font-size:13px;padding:4px 2px;border-radius:6px;width:40px;text-align:center;cursor:pointer;outline:none}
+.date-in{background:var(--sf2);border:1px solid var(--bd);color:var(--tx);font-family:inherit;font-size:13px;padding:4px 6px;border-radius:6px;width:120px;outline:none}
+.date-in::-webkit-calendar-picker-indicator{filter:invert(.6)}
+.add-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border:1px dashed var(--bd);border-radius:8px;color:var(--dim);font-size:12px;cursor:pointer;background:transparent;margin-top:8px;font-family:inherit}
+.add-btn:hover{border-color:var(--acc);color:var(--acc)}
+.del-btn{background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:2px 4px;font-family:inherit}
+.rec-card{background:linear-gradient(135deg,var(--sf),var(--sf2));border:1px solid var(--bd);border-radius:12px;padding:16px 18px 16px 26px;margin-bottom:10px;position:relative}
+.rec-stripe{position:absolute;left:0;top:0;width:4px;height:100%;background:var(--yel);border-radius:12px 0 0 12px}
+.toast{position:fixed;bottom:14px;right:14px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;background:var(--grn);color:#000;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none;z-index:100}
+.toast.on{opacity:1;transform:translateY(0)}
+.hot-item{font-size:11px;color:var(--dim);padding:2px 0}
+.hot-dot{color:var(--yel);margin-right:5px}
+.risk-item{padding:8px 0;border-bottom:1px solid #151925}
+.risk-item:last-child{border-bottom:none}
+.legend{font-size:11px;color:var(--dim);display:flex;gap:14px;margin-top:4px}
+.legend-dot{display:inline-block;width:22px;height:22px;border-radius:5px;text-align:center;line-height:22px;font-size:11px;font-weight:700;margin-right:4px}
+@media(max-width:768px){.grid2{grid-template-columns:1fr}.hg{grid-template-columns:repeat(3,1fr)}.hdr{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="toast" id="toast">✓ Saved</div>
+
+<script>
+const SK="pulse-v5";
+const HF=["contracts","financials","delivery","blendTeam","clientSat","engagement"];
+const HL=["Contracts","Financials","Delivery","Blend Team","Client Sat","Engagement"];
+const PPL=["Ankit","Charlie","Ryan"];
+
+const DD={people:{
+Ankit:{projects:[
+{id:"a1",name:"LinkedIn MIDA - Datawatch",lp:"Paul",dl:"Ankit Agarwal",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Claude Access is pending",risks:"",mit:"Jenee moving engineers to her org by EOW",sales:"",notes:""},
+{id:"a2",name:"Trust Project Sanket",lp:"Sanket",dl:"Ankit Agarwal",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Bangalore office incident",risks:"",mit:"",sales:"AI Workshop planned for March 17",notes:""}
+]},
+Charlie:{projects:[
+{id:"c1",name:"LinkedIn CGI FY26 CO2",lp:"Leo Pedraza/Mimi",dl:"Charlie Gage",contracts:2,financials:3,delivery:3,blendTeam:2,clientSat:3,engagement:2,upd:"2026-03-17",hot:"Renewal time",risks:"Adithya is on an island",mit:"",sales:"",notes:"Need to check on renewal"},
+{id:"c2",name:"LTS BI FY2025Q1 (Ileana) CO7",lp:"Ileana",dl:"Charlie Gage/David Salcedo",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",sales:"",notes:"Need to TB with David S"},
+{id:"c3",name:"LinkedIn MIDA - Targeting",lp:"Rajni/Irene",dl:"Charlie Gage/Yugdeep",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",sales:"",notes:""},
+{id:"c4",name:"LinkedIn MIDA - Datavision",lp:"Laura/Marco",dl:"Charlie/Yugdeep/Eric",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"",risks:"",mit:"",sales:"",notes:""}
+]},
+Ryan:{projects:[
+{id:"r1",name:"LinkedIn MIDA - Measurement",lp:"Zaid/Erica",dl:"Ryan Ottino",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Updating prioritizations for FY27",risks:"SEO data sent to AP was incomplete",mit:"Analyzing impact",sales:"In-housing MMM",notes:""},
+{id:"r2",name:"LTV Work",lp:"Licurgo",dl:"David Salcedo",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Bug found in NN build. Requires DS troubleshooting",risks:"",mit:"Zaid and Paolo rescoping project",sales:"CRM lifecycle workshop",notes:""},
+{id:"r3",name:"Incremental Testing",lp:"Faye",dl:"Ryan Ottino",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",sales:"",notes:""}
+]}
+},
+riskTracker:[
+{id:"rk1",owner:"Charlie",desc:"Possible Attrition - XYZ",level:"High",impact:"Affects Project Delivery",response:"KT/Documentation etc",notes:""},
+{id:"rk2",owner:"Ryan",desc:"",level:"Medium",impact:"",response:"",notes:""},
+{id:"rk3",owner:"Ankit",desc:"",level:"Low",impact:"",response:"",notes:""}
+],
+recognitions:[
+{id:"rc1",date:"Feb",name:"VJ",from:"Client Feedback (Rajni and Kaylee)",ctx:"Incredible partner on Large Hire Learning Week campaigns. Strong communicator and reliable resource through ad hoc targeting investigations."},
+{id:"rc2",date:"Feb",name:"Dharmendra",from:"Client Feedback (Shruti)",ctx:"Outstanding leadership as Sr. Engineering Data Scientist. Leading multiple projects with clarity and strong execution discipline."}
+],
+manualSP:[]};
+
+let data,tab="dash",exRec={};
+function load(){try{const s=localStorage.getItem(SK);if(s)data=JSON.parse(s);else data=JSON.parse(JSON.stringify(DD));}catch(e){data=JSON.parse(JSON.stringify(DD));}}
+function sv(){try{localStorage.setItem(SK,JSON.stringify(data));}catch(e){}const t=document.getElementById("toast");t.classList.add("on");setTimeout(()=>t.classList.remove("on"),900);}
+load();
+
+const uid=()=>Math.random().toString(36).slice(2,8);
+const e=s=>(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const scc=v=>v>=2.8?"var(--grn)":v>=2?"var(--yel)":"var(--red)";
+const scb=v=>v>=2.8?"rgba(52,211,153,.12)":v>=2?"rgba(251,191,36,.12)":"rgba(248,113,113,.12)";
+const scr=v=>v>=2.8?"#34d399":v>=2?"#fbbf24":"#f87171";
+const av=(a,f)=>a.length?a.reduce((s,p)=>s+(p[f]||0),0)/a.length:0;
+
+function allP(){const r=[];PPL.forEach(p=>data.people[p].projects.forEach(pr=>r.push({...pr,owner:p})));return r;}
+function salesFS(){return allP().filter(p=>p.sales?.trim());}
+function risksFS(){return allP().filter(p=>p.risks?.trim());}
+
+function setTab(t){tab=t;render();}
+
+function render(){
+const ap=document.getElementById("app");
+const wk=new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+let h=`<div class="hdr"><h1>LinkedIn <span>Delivery Pulse Check</span> 2026</h1><div class="hdr-r"><span class="wk">Week of ${wk}</span><button class="rst" onclick="if(confirm('Reset all data?')){data=JSON.parse(JSON.stringify(DD));sv();render();}">Reset</button></div></div>`;
+
+const tabs=[{id:"dash",l:"◉ Dashboard"},{id:"sales",l:"$ Sales Plays"},{id:"risks",l:"⚠ Risk Tracker"},{id:"Ankit",l:"Ankit",p:1},{id:"Charlie",l:"Charlie",p:1},{id:"Ryan",l:"Ryan",p:1},{id:"rec",l:"★ Recognition"}];
+h+=`<div class="tabs">${tabs.map(t=>`<button class="tab${tab===t.id?" on":""}${t.p?" p":""}" onclick="setTab('${t.id}')">${t.l}</button>`).join("")}</div>`;
+
+if(tab==="dash")h+=renderDash();
+else if(tab==="sales")h+=renderSales();
+else if(tab==="risks")h+=renderRisks();
+else if(tab==="rec")h+=renderRec();
+else if(PPL.includes(tab))h+=renderPerson(tab);
+
+ap.innerHTML=h;
+}
+
+function renderDash(){
+const ap=allP(),avgs=HF.map(f=>av(ap,f)),ov=avgs.reduce((a,b)=>a+b,0)/avgs.length;
+const rc={High:0,Medium:0,Low:0};data.riskTracker.forEach(r=>{if(r.desc&&r.level)rc[r.level]++;});
+const tR=data.riskTracker.filter(r=>r.desc).length+risksFS().length;
+const sf=salesFS(),rf=risksFS();
+
+let h=`<div class="grid4">`;
+[[`Account Health`,ov.toFixed(2),scr(ov),`of 3.00 · ${ap.length} projects`],
+[`Projects`,ap.length,`#4c8df5`,`across 3 leads`],
+[`Active Risks`,tR,`#f87171`,`${rc.High}H · ${rc.Medium}M · ${rc.Low}L`],
+[`Sales Opps`,sf.length,`#34d399`,`from workstreams`]].forEach(([l,v,c,s])=>{
+h+=`<div class="card"><div class="sl">${l}</div><div class="sv" style="color:${c}">${v}</div><div class="ss">${s}</div></div>`;
+});
+h+=`</div>`;
+
+h+=`<div class="grid2"><div class="card"><div class="ct"><span class="dot" style="background:var(--acc)"></span>Health by Category</div>`;
+HF.forEach((f,i)=>{const v=avgs[i],pct=Math.round(v/3*100);
+h+=`<div class="bar-row"><div class="bar-lbl">${HL[i]}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${scr(v)}">${v.toFixed(2)}</div></div></div>`;
+});
+h+=`</div><div class="card"><div class="ct"><span class="dot" style="background:var(--red)"></span>Risk Breakdown</div>`;
+["High","Medium","Low"].forEach(l=>{const cnt=rc[l]||0;const col=l==="High"?"#f87171":l==="Medium"?"#fbbf24":"#34d399";
+const pct=tR?Math.max(cnt/tR*100,cnt?8:0):0;
+h+=`<div class="bar-row"><div class="bar-lbl">${l}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${col}">${cnt}</div></div></div>`;
+});
+if(rf.length){h+=`<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:8px"><div style="font-size:11px;color:var(--dim);margin-bottom:6px">FROM WORKSTREAMS</div>`;
+rf.forEach(r=>{h+=`<div class="risk-item"><strong>${e(r.owner)}</strong> — ${e(r.name)}: ${e(r.risks)}${r.mit?`<div style="font-size:11px;color:var(--grn);margin-top:1px">↳ ${e(r.mit)}</div>`:""}</div>`;});
+h+=`</div>`;}
+h+=`</div></div>`;
+
+PPL.forEach(p=>{const d2=data.people[p],pa=HF.map(f=>av(d2.projects,f));
+h+=`<div class="card click" onclick="setTab('${p}')"><div class="ct"><span class="dot" style="background:var(--prp)"></span>${p}'s Workstreams (${d2.projects.length})<span style="margin-left:auto;font-size:11px;color:var(--acc)">Edit →</span></div><div class="hg">`;
+HF.forEach((f,i)=>{h+=`<div class="hi"><span class="l">${HL[i]}</span><span class="v" style="color:${scc(pa[i])}">${pa[i].toFixed(1)}</span></div>`;});
+h+=`</div>`;
+const hots=d2.projects.filter(x=>x.hot);
+if(hots.length){h+=`<div style="margin-top:8px">`;hots.forEach(x=>{h+=`<div class="hot-item"><span class="hot-dot">●</span><strong style="color:#8890a8">${e(x.name)}:</strong> ${e(x.hot)}</div>`;});h+=`</div>`;}
+h+=`</div>`;
+});
+return h;
+}
+
+function renderPerson(who){
+const d2=data.people[who],pa=HF.map(f=>av(d2.projects,f));
+let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--prp)"></span>${who}'s Health Overview</div><div class="hg">`;
+HF.forEach((f,i)=>{h+=`<div class="hi"><span class="l">${HL[i]}</span><span class="v" style="color:${scc(pa[i])}">${pa[i].toFixed(2)}</span></div>`;});
+h+=`</div></div>`;
+
+h+=`<div class="card"><div class="ct"><span class="dot" style="background:var(--acc)"></span>Projects (${d2.projects.length})</div><div style="overflow-x:auto"><table><thead><tr><th>Project</th><th>LI Partner</th><th>DL</th>`;
+HL.forEach(l=>{h+=`<th style="text-align:center;min-width:48px">${l}</th>`;});
+h+=`<th>Updated</th><th>Hot Topics</th><th>Risks</th><th>Mitigation</th><th>Sales Plays</th><th>Notes</th><th></th></tr></thead><tbody>`;
+
+d2.projects.forEach((p,i)=>{
+h+=`<tr><td><input class="ei" value="${e(p.name)}" onchange="uP('${who}',${i},'name',this.value)" style="min-width:130px"></td>`;
+h+=`<td><input class="ei" value="${e(p.lp)}" onchange="uP('${who}',${i},'lp',this.value)" style="min-width:80px"></td>`;
+h+=`<td><input class="ei" value="${e(p.dl)}" onchange="uP('${who}',${i},'dl',this.value)" style="min-width:80px"></td>`;
+HF.forEach(f=>{h+=`<td style="text-align:center"><select class="sc-sel" style="background:${scb(p[f])};color:${scr(p[f])}" onchange="uP('${who}',${i},'${f}',+this.value)"><option value="1"${p[f]===1?" selected":""}>1</option><option value="2"${p[f]===2?" selected":""}>2</option><option value="3"${p[f]===3?" selected":""}>3</option></select></td>`;});
+h+=`<td><input type="date" class="date-in" value="${e(p.upd)}" onchange="uP('${who}',${i},'upd',this.value)"></td>`;
+["hot","risks","mit","sales","notes"].forEach(f=>{h+=`<td><textarea class="ei" onchange="uP('${who}',${i},'${f}',this.value)" style="min-width:100px">${e(p[f])}</textarea></td>`;});
+h+=`<td><button class="del-btn" onclick="rP('${who}',${i})">✕</button></td></tr>`;
+});
+h+=`</tbody></table></div><button class="add-btn" onclick="aP('${who}')">+ Add Project</button></div>`;
+h+=`<div class="legend"><span><span class="legend-dot" style="background:rgba(52,211,153,.12);color:#34d399">3</span>Healthy</span><span><span class="legend-dot" style="background:rgba(251,191,36,.12);color:#fbbf24">2</span>Attention</span><span><span class="legend-dot" style="background:rgba(248,113,113,.12);color:#f87171">1</span>At Risk</span></div>`;
+return h;
+}
+
+function renderSales(){
+const sf=salesFS();
+let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--grn)"></span>Sales from Workstreams</div><table><thead><tr><th>Owner</th><th>Project</th><th>Opportunity</th><th>Updated</th></tr></thead><tbody>`;
+if(!sf.length)h+=`<tr><td colspan="4" style="color:var(--dim)">No sales plays yet — add in workstream tabs</td></tr>`;
+else sf.forEach(s=>{h+=`<tr><td><strong>${e(s.owner)}</strong></td><td>${e(s.name)}</td><td>${e(s.sales)}</td><td>${e(s.upd)||"—"}</td></tr>`;});
+h+=`</tbody></table></div>`;
+
+h+=`<div class="card"><div class="ct"><span class="dot" style="background:var(--acc)"></span>Manual Sales Plays</div><table><thead><tr><th>Client</th><th>Opportunity</th><th>Description</th><th>Next Steps</th><th>Notes</th><th></th></tr></thead><tbody>`;
+(data.manualSP||[]).forEach((sp,i)=>{
+h+=`<tr><td><input class="ei" value="${e(sp.client)}" onchange="uSP(${i},'client',this.value)"></td>`;
+h+=`<td><input class="ei" value="${e(sp.opp)}" onchange="uSP(${i},'opp',this.value)"></td>`;
+h+=`<td><input class="ei" value="${e(sp.desc)}" onchange="uSP(${i},'desc',this.value)"></td>`;
+h+=`<td><input class="ei" value="${e(sp.next)}" onchange="uSP(${i},'next',this.value)"></td>`;
+h+=`<td><input class="ei" value="${e(sp.notes)}" onchange="uSP(${i},'notes',this.value)"></td>`;
+h+=`<td><button class="del-btn" onclick="rSP(${i})">✕</button></td></tr>`;
+});
+h+=`</tbody></table><button class="add-btn" onclick="aSP()">+ Add Sales Play</button></div>`;
+return h;
+}
+
+function renderRisks(){
+const rf=risksFS();
+let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--red)"></span>Risk Tracker</div><div style="overflow-x:auto"><table><thead><tr><th>Owner</th><th>Description</th><th>Level</th><th>Impact</th><th>Response</th><th>Notes</th><th></th></tr></thead><tbody>`;
+data.riskTracker.forEach((r,i)=>{
+const lv=r.level==="High"?1:r.level==="Medium"?2:3;
+h+=`<tr><td><input class="ei" value="${e(r.owner)}" onchange="uR(${i},'owner',this.value)" style="min-width:70px"></td>`;
+h+=`<td><textarea class="ei" onchange="uR(${i},'desc',this.value)" style="min-width:130px">${e(r.desc)}</textarea></td>`;
+h+=`<td><select class="sc-sel" style="width:78px;background:${scb(lv)};color:${scr(lv)}" onchange="uR(${i},'level',this.value)"><option${r.level==="High"?" selected":""}>High</option><option${r.level==="Medium"?" selected":""}>Medium</option><option${r.level==="Low"?" selected":""}>Low</option></select></td>`;
+h+=`<td><textarea class="ei" onchange="uR(${i},'impact',this.value)" style="min-width:110px">${e(r.impact)}</textarea></td>`;
+h+=`<td><textarea class="ei" onchange="uR(${i},'response',this.value)" style="min-width:110px">${e(r.response)}</textarea></td>`;
+h+=`<td><textarea class="ei" onchange="uR(${i},'notes',this.value)">${e(r.notes)}</textarea></td>`;
+h+=`<td><button class="del-btn" onclick="rR(${i})">✕</button></td></tr>`;
+});
+h+=`</tbody></table></div><button class="add-btn" onclick="aR()">+ Add Risk</button></div>`;
+
+if(rf.length){h+=`<div class="card"><div class="ct"><span class="dot" style="background:#fb923c"></span>Risks from Workstreams</div><table><thead><tr><th>Owner</th><th>Project</th><th>Risk</th><th>Mitigation</th></tr></thead><tbody>`;
+rf.forEach(r=>{h+=`<tr><td><strong>${e(r.owner)}</strong></td><td>${e(r.name)}</td><td>${e(r.risks)}</td><td>${e(r.mit)||"—"}</td></tr>`;});
+h+=`</tbody></table></div>`;}
+return h;
+}
+
+function renderRec(){
+let h="";
+data.recognitions.forEach((r,i)=>{
+const exp=exRec[i];
+h+=`<div class="rec-card"><div class="rec-stripe"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div><div style="font-weight:700;font-size:14px">★ ${e(r.name)}</div><div style="font-size:11px;color:var(--dim)">${e(r.from)}</div></div><div style="display:flex;gap:6px;align-items:center"><span style="font-size:10px;color:var(--dim);background:#0a0c12;padding:3px 8px;border-radius:12px">${e(r.date)}</span><button class="del-btn" onclick="rRec(${i})">✕</button></div></div>`;
+h+=`<div style="font-size:12px;color:#8890a8;line-height:1.5;max-height:${exp?"none":"60px"};overflow:hidden">${e(r.ctx)}</div>`;
+if(r.ctx.length>80)h+=`<button style="background:none;border:none;color:var(--acc);font-size:11px;cursor:pointer;margin-top:3px" onclick="exRec[${i}]=!exRec[${i}];render();">${exp?"Less":"More..."}</button>`;
+h+=`</div>`;
+});
+
+h+=`<div class="card"><div class="ct">Add Recognition</div><div style="display:grid;grid-template-columns:90px 130px 1fr;gap:8px"><input class="ei" id="rd" placeholder="Month" style="border:1px solid var(--bd);background:var(--sf2)"><input class="ei" id="rn" placeholder="Name" style="border:1px solid var(--bd);background:var(--sf2)"><input class="ei" id="rf" placeholder="From" style="border:1px solid var(--bd);background:var(--sf2)"></div><textarea class="ei" id="rc" placeholder="Context..." style="border:1px solid var(--bd);background:var(--sf2);margin-top:6px;min-height:50px"></textarea><button class="add-btn" onclick="addRec()">+ Add</button></div>`;
+return h;
+}
+
+// MUTATIONS
+function uP(who,i,f,v){data.people[who].projects[i][f]=v;sv();if(HF.includes(f))render();}
+function aP(who){data.people[who].projects.push({id:uid(),name:"New Project",lp:"",dl:"",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",sales:"",notes:""});sv();render();}
+function rP(who,i){if(!confirm("Remove this project?"))return;data.people[who].projects.splice(i,1);sv();render();}
+function uR(i,f,v){data.riskTracker[i][f]=v;sv();}
+function aR(){data.riskTracker.push({id:uid(),owner:"",desc:"",level:"Medium",impact:"",response:"",notes:""});sv();render();}
+function rR(i){if(!confirm("Remove?"))return;data.riskTracker.splice(i,1);sv();render();}
+function uSP(i,f,v){data.manualSP[i][f]=v;sv();}
+function aSP(){data.manualSP.push({id:uid(),client:"",opp:"",desc:"",next:"",notes:""});sv();render();}
+function rSP(i){if(!confirm("Remove?"))return;data.manualSP.splice(i,1);sv();render();}
+function addRec(){const d=document.getElementById("rd").value,n=document.getElementById("rn").value,f=document.getElementById("rf").value,c=document.getElementById("rc").value;if(!n||!c)return alert("Name & context required");data.recognitions.unshift({id:uid(),date:d,name:n,from:f,ctx:c});sv();render();}
+function rRec(i){if(!confirm("Remove?"))return;data.recognitions.splice(i,1);sv();render();}
+
+render();
+</script>
+</body>
+</html>
