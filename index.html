@@ -142,19 +142,36 @@ function toSheetFormat(){
 }
 
 function fromSheetFormat(d){
+  // Normalize ISO timestamps (2026-03-18T06:00:00.000Z) to YYYY-MM-DD
+  function fixDate(v){
+    if(!v||v==="")return "";
+    v=String(v);
+    if(v.includes("T"))return v.slice(0,10);
+    if(/^\d{4}-\d{2}-\d{2}$/.test(v))return v;
+    // Try to parse other formats
+    var dt=new Date(v);
+    if(!isNaN(dt))return dt.toISOString().slice(0,10);
+    return v;
+  }
+  var PROJ_DATES=["upd","mitDue"];
+  var RISK_DATES=["mitDue"];
+  var SALES_DATES=["lastUpd"];
+  var CTR_DATES=["start","end"];
+
   var out={people:{Ankit:{projects:[]},Charlie:{projects:[]},Ryan:{projects:[]}},riskTracker:[],salesPlays:[],contracts:[],recognitions:[]};
   PPL.forEach(p=>{
     if(d[p]&&d[p].length){
       out.people[p].projects=d[p].map(r=>{
         NUM_FIELDS.forEach(f=>{r[f]=Number(r[f])||0;});
+        PROJ_DATES.forEach(f=>{r[f]=fixDate(r[f]);});
         if(!r.id)r.id=uid();
         return r;
       });
     }
   });
-  if(d.Risks)out.riskTracker=d.Risks.map(r=>{if(!r.id)r.id=uid();return r;});
-  if(d.Sales)out.salesPlays=d.Sales.map(r=>{if(!r.id)r.id=uid();return r;});
-  if(d.Contracts)out.contracts=d.Contracts.map(r=>{if(!r.id)r.id=uid();r.renewed=(r.renewed==="TRUE"||r.renewed===true);return r;});
+  if(d.Risks)out.riskTracker=d.Risks.map(r=>{if(!r.id)r.id=uid();RISK_DATES.forEach(f=>{r[f]=fixDate(r[f]);});return r;});
+  if(d.Sales)out.salesPlays=d.Sales.map(r=>{if(!r.id)r.id=uid();SALES_DATES.forEach(f=>{r[f]=fixDate(r[f]);});return r;});
+  if(d.Contracts)out.contracts=d.Contracts.map(r=>{if(!r.id)r.id=uid();r.renewed=(r.renewed==="TRUE"||r.renewed===true);CTR_DATES.forEach(f=>{r[f]=fixDate(r[f]);});return r;});
   if(d.Recognitions)out.recognitions=d.Recognitions.map(r=>{if(!r.id)r.id=uid();return r;});
   return out;
 }
