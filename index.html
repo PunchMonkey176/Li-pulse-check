@@ -16,6 +16,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .wk{font-size:11px;color:var(--dim);background:var(--sf);padding:5px 12px;border-radius:7px;border:1px solid var(--bd);box-shadow:var(--shd)}
 .rst{font-size:11px;color:var(--red);background:var(--red-bg);padding:5px 12px;border-radius:7px;border:1px solid #fecaca;cursor:pointer;font-family:inherit}
 .rst:hover{background:#fee2e2}
+.sync-btn{font-size:11px;color:var(--acc);background:#eff6ff;padding:5px 12px;border-radius:7px;border:1px solid #bfdbfe;cursor:pointer;font-family:inherit}
+.sync-btn:hover{background:#dbeafe}
 .tabs{display:flex;gap:3px;padding:14px 0 18px;overflow-x:auto}
 .tab{padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:400;color:var(--dim);background:transparent;border:none;transition:all .15s;white-space:nowrap;user-select:none;font-family:inherit}
 .tab:hover{color:var(--tx);background:var(--sf)}
@@ -63,14 +65,16 @@ tr:hover td.grp-sales{background:#f0faf4}
 .del-btn:hover{opacity:1}
 .rec-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px 18px 16px 26px;margin-bottom:10px;position:relative;box-shadow:var(--shd)}
 .rec-stripe{position:absolute;left:0;top:0;width:4px;height:100%;border-radius:12px 0 0 12px}
-.toast{position:fixed;bottom:14px;right:14px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;background:var(--grn);color:#fff;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none;z-index:100;box-shadow:0 4px 12px rgba(5,150,105,.25)}
+.toast{position:fixed;bottom:14px;right:14px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;color:#fff;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none;z-index:100}
 .toast.on{opacity:1;transform:translateY(0)}
+.toast-save{background:var(--grn);box-shadow:0 4px 12px rgba(5,150,105,.25)}
+.toast-sync{background:var(--acc);box-shadow:0 4px 12px rgba(37,99,235,.25)}
+.toast-err{background:var(--red);box-shadow:0 4px 12px rgba(220,38,38,.25)}
 .hot-item{font-size:11px;color:var(--dim);padding:2px 0}
 .hot-dot{color:var(--yel);margin-right:5px}
 .legend{font-size:11px;color:var(--dim);display:flex;gap:14px;margin-top:4px}
 .legend-dot{display:inline-block;width:22px;height:22px;border-radius:5px;text-align:center;line-height:22px;font-size:11px;font-weight:700;margin-right:4px}
 .upd-badge{font-size:10px;color:var(--dim);background:var(--sf2);padding:2px 6px;border-radius:4px}
-/* Contract alerts */
 .alert{border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;font-size:13px}
 .alert .alert-icon{font-size:18px;flex-shrink:0;line-height:1}
 .alert .alert-body{flex:1}
@@ -80,72 +84,140 @@ tr:hover td.grp-sales{background:#f0faf4}
 .alert-orange{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}
 .alert-yellow{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
 .alert-blue{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
-/* Contract card */
-.ctr-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin-bottom:10px;box-shadow:var(--shd);display:flex;align-items:center;gap:16px;position:relative;overflow:hidden}
-.ctr-card .ctr-stripe{position:absolute;left:0;top:0;width:5px;height:100%}
-.ctr-card .ctr-info{flex:1;padding-left:10px}
-.ctr-card .ctr-name{font-weight:700;font-size:14px;margin-bottom:2px}
-.ctr-card .ctr-dates{font-size:11px;color:var(--dim)}
-.ctr-card .ctr-countdown{text-align:center;min-width:90px}
-.ctr-card .ctr-days{font-size:32px;font-weight:200;letter-spacing:-1px}
-.ctr-card .ctr-label{font-size:10px;text-transform:uppercase;letter-spacing:.5px}
-.ctr-bar{height:6px;background:var(--sf2);border-radius:3px;margin-top:8px;overflow:hidden}
+.ctr-bar{height:6px;background:var(--sf2);border-radius:3px;margin-top:4px;overflow:hidden}
 .ctr-bar-fill{height:100%;border-radius:3px;transition:width .4s}
-.ctr-renew{font-size:10px;padding:3px 8px;border-radius:12px;font-weight:600;white-space:nowrap}
-@media(max-width:768px){.grid2{grid-template-columns:1fr}.hg{grid-template-columns:repeat(3,1fr)}.hdr{flex-direction:column;align-items:flex-start}.ctr-card{flex-direction:column;align-items:flex-start}}
+.ctr-renew{font-size:10px;padding:3px 8px;border-radius:12px;font-weight:600;white-space:nowrap;cursor:pointer}
+.loading{display:flex;align-items:center;justify-content:center;min-height:60vh;flex-direction:column;gap:12px;color:var(--dim)}
+.spinner{width:32px;height:32px;border:3px solid var(--bd);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:768px){.grid2{grid-template-columns:1fr}.hg{grid-template-columns:repeat(3,1fr)}.hdr{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
-<div class="app" id="app"></div>
-<div class="toast" id="toast">✓ Saved</div>
+<div class="app" id="app"><div class="loading"><div class="spinner"></div><div>Loading from Google Sheets...</div></div></div>
+<div class="toast toast-save" id="toast-save">✓ Saved to Google Sheets</div>
+<div class="toast toast-sync" id="toast-sync">↻ Synced from Google Sheets</div>
+<div class="toast toast-err" id="toast-err">⚠ Save failed — retrying...</div>
 
 <script>
-const SK="pulse-v8";
+const API="https://script.google.com/macros/s/AKfycbw3HVTzSVI2TbS-LF3bjXFdywzykZWnbsRRsSdX_eYoZuOw7uhoXvwvw-vFe9Ky6DrYlA/exec";
 const HF=["contracts","financials","delivery","blendTeam","clientSat","engagement"];
 const HL=["Contracts","Financials","Delivery","Blend Team","Client Sat","Engagement"];
 const PPL=["Ankit","Charlie","Ryan"];
+const NUM_FIELDS=["contracts","financials","delivery","blendTeam","clientSat","engagement"];
 
 const DD={people:{
-Ankit:{projects:[
-{id:"a1",name:"LinkedIn MIDA - Datawatch",lp:"Paul",dl:"Ankit Agarwal",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Claude Access is pending",risks:"",mit:"Jenee moving engineers to her org by EOW",mitDue:"",sales:"",notes:""},
-{id:"a2",name:"Trust Project Sanket",lp:"Sanket",dl:"Ankit Agarwal",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Bangalore office incident",risks:"",mit:"",mitDue:"",sales:"AI Workshop planned for March 17",notes:""}
-]},
-Charlie:{projects:[
-{id:"c1",name:"LinkedIn CGI FY26 CO2",lp:"Leo Pedraza/Mimi",dl:"Charlie Gage",contracts:2,financials:3,delivery:3,blendTeam:2,clientSat:3,engagement:2,upd:"2026-03-17",hot:"Renewal time",risks:"Adithya is on an island",mit:"",mitDue:"",sales:"",notes:"Need to check on renewal"},
+Ankit:{projects:[{id:"a1",name:"LinkedIn MIDA - Datawatch",lp:"Paul",dl:"Ankit Agarwal",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Claude Access is pending",risks:"",mit:"Jenee moving engineers to her org by EOW",mitDue:"",sales:"",notes:""},
+{id:"a2",name:"Trust Project Sanket",lp:"Sanket",dl:"Ankit Agarwal",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Bangalore office incident",risks:"",mit:"",mitDue:"",sales:"AI Workshop planned for March 17",notes:""}]},
+Charlie:{projects:[{id:"c1",name:"LinkedIn CGI FY26 CO2",lp:"Leo Pedraza/Mimi",dl:"Charlie Gage",contracts:2,financials:3,delivery:3,blendTeam:2,clientSat:3,engagement:2,upd:"2026-03-17",hot:"Renewal time",risks:"Adithya is on an island",mit:"",mitDue:"",sales:"",notes:"Need to check on renewal"},
 {id:"c2",name:"LTS BI FY2025Q1 (Ileana) CO7",lp:"Ileana",dl:"Charlie Gage/David Salcedo",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:"Need to TB with David S"},
 {id:"c3",name:"LinkedIn MIDA - Targeting",lp:"Rajni/Irene",dl:"Charlie Gage/Yugdeep",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""},
-{id:"c4",name:"LinkedIn MIDA - Datavision",lp:"Laura/Marco",dl:"Charlie/Yugdeep/Eric",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""}
-]},
-Ryan:{projects:[
-{id:"r1",name:"LinkedIn MIDA - Measurement",lp:"Zaid/Erica",dl:"Ryan Ottino",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Updating prioritizations for FY27",risks:"SEO data sent to AP was incomplete",mit:"Analyzing impact",mitDue:"",sales:"In-housing MMM",notes:""},
-{id:"r2",name:"LTV Work",lp:"Licurgo",dl:"David Salcedo",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Bug found in NN build. Requires DS troubleshooting",risks:"",mit:"Zaid and Paolo rescoping project",mitDue:"",sales:"CRM lifecycle workshop",notes:""},
-{id:"r3",name:"Incremental Testing",lp:"Faye",dl:"Ryan Ottino",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""}
-]}
+{id:"c4",name:"LinkedIn MIDA - Datavision",lp:"Laura/Marco",dl:"Charlie/Yugdeep/Eric",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""}]},
+Ryan:{projects:[{id:"r1",name:"LinkedIn MIDA - Measurement",lp:"Zaid/Erica",dl:"Ryan Ottino",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Updating prioritizations for FY27",risks:"SEO data sent to AP was incomplete",mit:"Analyzing impact",mitDue:"",sales:"In-housing MMM",notes:""},
+{id:"r2",name:"LTV Work",lp:"Licurgo",dl:"David Salcedo",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Bug found in NN build",risks:"",mit:"Zaid and Paolo rescoping project",mitDue:"",sales:"CRM lifecycle workshop",notes:""},
+{id:"r3",name:"Incremental Testing",lp:"Faye",dl:"Ryan Ottino",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""}]}
 },
-riskTracker:[
-{id:"rk1",owner:"Charlie",project:"",desc:"Possible Attrition - XYZ",level:"High",impact:"Affects Project Delivery",mitigation:"KT/Documentation etc",mitDue:"",notes:"",_src:""},
-{id:"rk2",owner:"Ryan",project:"",desc:"",level:"Medium",impact:"",mitigation:"",mitDue:"",notes:"",_src:""},
-{id:"rk3",owner:"Ankit",project:"",desc:"",level:"Low",impact:"",mitigation:"",mitDue:"",notes:"",_src:""}
-],
+riskTracker:[{id:"rk1",owner:"Charlie",project:"",desc:"Possible Attrition - XYZ",level:"High",impact:"Affects Project Delivery",mitigation:"KT/Documentation etc",mitDue:"",notes:"",_src:""}],
 salesPlays:[],
-contracts:[
-{id:"ct1",name:"LinkedIn CGI FY26 CO2",start:"2025-07-01",end:"2026-06-30",owner:"Charlie",renewed:false,notes:""},
-{id:"ct2",name:"LTS BI FY2025Q1 (Ileana) CO7",start:"2025-02-21",end:"2026-02-20",owner:"Charlie",renewed:false,notes:""},
-{id:"ct3",name:"LinkedIn MIDA",start:"2025-10-01",end:"2026-09-30",owner:"Multiple",renewed:false,notes:""},
-{id:"ct4",name:"Trust Project Sanket",start:"2025-09-01",end:"2026-08-31",owner:"Ankit",renewed:false,notes:""}
-],
-recognitions:[
-{id:"rc1",date:"Feb",name:"VJ",from:"Client Feedback (Rajni and Kaylee)",ctx:"Incredible partner on Large Hire Learning Week campaigns. Strong communicator and reliable resource through ad hoc targeting investigations."},
-{id:"rc2",date:"Feb",name:"Dharmendra",from:"Client Feedback (Shruti)",ctx:"Outstanding leadership as Sr. Engineering Data Scientist. Leading multiple projects with clarity and strong execution discipline."}
-]};
+contracts:[{id:"ct1",name:"LinkedIn CGI FY26 CO2",owner:"Charlie",start:"2025-07-01",end:"2026-06-30",renewed:false,notes:""},
+{id:"ct2",name:"LTS BI FY2025Q1 (Ileana) CO7",owner:"Charlie",start:"2025-02-21",end:"2026-02-20",renewed:false,notes:""},
+{id:"ct3",name:"LinkedIn MIDA",owner:"Multiple",start:"2025-10-01",end:"2026-09-30",renewed:false,notes:""},
+{id:"ct4",name:"Trust Project Sanket",owner:"Ankit",start:"2025-09-01",end:"2026-08-31",renewed:false,notes:""}],
+recognitions:[{id:"rc1",date:"Feb",name:"VJ",from:"Client Feedback (Rajni and Kaylee)",ctx:"Incredible partner on Large Hire Learning Week campaigns."},
+{id:"rc2",date:"Feb",name:"Dharmendra",from:"Client Feedback (Shruti)",ctx:"Outstanding leadership as Sr. Engineering Data Scientist."}]};
 
-let data,tab="dash",exRec={};
-function load(){try{const s=localStorage.getItem(SK);if(s){data=JSON.parse(s);if(!data.salesPlays)data.salesPlays=[];if(!data.contracts)data.contracts=[];}else data=JSON.parse(JSON.stringify(DD));}catch(e){data=JSON.parse(JSON.stringify(DD));}}
-function sv(){try{localStorage.setItem(SK,JSON.stringify(data));}catch(e){}const t=document.getElementById("toast");t.classList.add("on");setTimeout(()=>t.classList.remove("on"),900);}
-load();
+let data=null,tab="dash",exRec={},saveTimer=null,saving=false;
 
+// ===== GOOGLE SHEETS SYNC =====
+function toSheetFormat(){
+  return {
+    Ankit:data.people.Ankit.projects,
+    Charlie:data.people.Charlie.projects,
+    Ryan:data.people.Ryan.projects,
+    Risks:data.riskTracker,
+    Sales:data.salesPlays,
+    Contracts:data.contracts.map(c=>({...c,renewed:c.renewed?"TRUE":"FALSE"})),
+    Recognitions:data.recognitions
+  };
+}
+
+function fromSheetFormat(d){
+  var out={people:{Ankit:{projects:[]},Charlie:{projects:[]},Ryan:{projects:[]}},riskTracker:[],salesPlays:[],contracts:[],recognitions:[]};
+  PPL.forEach(p=>{
+    if(d[p]&&d[p].length){
+      out.people[p].projects=d[p].map(r=>{
+        NUM_FIELDS.forEach(f=>{r[f]=Number(r[f])||0;});
+        if(!r.id)r.id=uid();
+        return r;
+      });
+    }
+  });
+  if(d.Risks)out.riskTracker=d.Risks.map(r=>{if(!r.id)r.id=uid();return r;});
+  if(d.Sales)out.salesPlays=d.Sales.map(r=>{if(!r.id)r.id=uid();return r;});
+  if(d.Contracts)out.contracts=d.Contracts.map(r=>{if(!r.id)r.id=uid();r.renewed=(r.renewed==="TRUE"||r.renewed===true);return r;});
+  if(d.Recognitions)out.recognitions=d.Recognitions.map(r=>{if(!r.id)r.id=uid();return r;});
+  return out;
+}
+
+async function loadFromSheet(){
+  try{
+    const r=await fetch(API+"?action=read");
+    const d=await r.json();
+    if(d.error){throw new Error(d.error);}
+    // Check if sheet has data
+    const hasData=PPL.some(p=>d[p]&&d[p].length);
+    if(hasData){
+      data=fromSheetFormat(d);
+    } else {
+      // First time: seed with defaults
+      data=JSON.parse(JSON.stringify(DD));
+      await saveToSheet();
+    }
+    syncRisks();syncSales();
+    render();
+    showToast("sync");
+  }catch(e){
+    console.error("Load failed:",e);
+    // Fallback to localStorage
+    try{const s=localStorage.getItem("pulse-v8");if(s)data=JSON.parse(s);}catch(e2){}
+    if(!data)data=JSON.parse(JSON.stringify(DD));
+    syncRisks();syncSales();
+    render();
+  }
+}
+
+async function saveToSheet(){
+  saving=true;
+  try{
+    // Also save to localStorage as backup
+    try{localStorage.setItem("pulse-v8",JSON.stringify(data));}catch(e){}
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action:"save",data:toSheetFormat()})});
+    const d=await r.json();
+    if(d.status==="saved"){showToast("save");}
+    else{showToast("err");}
+  }catch(e){
+    console.error("Save failed:",e);
+    showToast("err");
+  }
+  saving=false;
+}
+
+// Debounced save - waits 1.5s after last change before saving
+function queueSave(){
+  if(saveTimer)clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{saveToSheet();},1500);
+}
+
+function showToast(type){
+  const el=document.getElementById("toast-"+type);
+  if(!el)return;
+  el.classList.add("on");
+  setTimeout(()=>el.classList.remove("on"),1500);
+}
+
+// ===== HELPERS =====
 const uid=()=>Math.random().toString(36).slice(2,8);
-const esc=s=>(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const esc=s=>(s||"").toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 const scc=v=>v>=2.8?"var(--grn)":v>=2?"var(--yel)":"var(--red)";
 const scr=v=>v>=2.8?"#059669":v>=2?"#d97706":"#dc2626";
 const scbg=v=>v>=2.8?"var(--grn-bg)":v>=2?"var(--yel-bg)":"var(--red-bg)";
@@ -178,25 +250,25 @@ function syncMitBack(who,idx){
   const rt=data.riskTracker.find(r=>r._src===who+"|"+p.id);
   if(rt){rt.mitigation=p.mit||"";rt.mitDue=p.mitDue||"";}
 }
-syncRisks();syncSales();
+
+function ctrUrgency(c){
+  if(c.renewed)return{color:"#059669",icon:"✅",cls:"alert-blue",label:"Renewed",days:999};
+  const days=daysBetween(today(),c.end);
+  if(days<0)return{color:"#dc2626",icon:"⛔",cls:"alert-red",label:"Expired",days};
+  if(days<=30)return{color:"#dc2626",icon:"🔴",cls:"alert-red",label:"Critical",days};
+  if(days<=60)return{color:"#ea580c",icon:"🟠",cls:"alert-orange",label:"Urgent",days};
+  if(days<=90)return{color:"#d97706",icon:"🟡",cls:"alert-yellow",label:"Attention",days};
+  return{color:"#059669",icon:"🟢",cls:"alert-blue",label:"On Track",days};
+}
 
 function setTab(t){tab=t;render();}
 
-// Contract urgency helpers
-function ctrUrgency(c){
-  if(c.renewed)return{level:"renewed",color:"#059669",bg:"var(--grn-bg)",border:"#a7f3d0",icon:"✓",cls:"alert-blue",label:"Renewed"};
-  const days=daysBetween(today(),c.end);
-  if(days<0)return{level:"expired",color:"#dc2626",bg:"var(--red-bg)",border:"#fecaca",icon:"⛔",cls:"alert-red",label:"Expired",days:days};
-  if(days<=30)return{level:"critical",color:"#dc2626",bg:"var(--red-bg)",border:"#fecaca",icon:"🔴",cls:"alert-red",label:"Critical",days};
-  if(days<=60)return{level:"urgent",color:"#ea580c",bg:"#fff7ed",border:"#fed7aa",icon:"🟠",cls:"alert-orange",label:"Urgent",days};
-  if(days<=90)return{level:"warning",color:"#d97706",bg:"var(--yel-bg)",border:"#fde68a",icon:"🟡",cls:"alert-yellow",label:"Attention",days};
-  return{level:"ok",color:"#059669",bg:"var(--grn-bg)",border:"#a7f3d0",icon:"🟢",cls:"alert-blue",label:"On Track",days};
-}
-
+// ===== RENDER =====
 function render(){
+if(!data)return;
 const ap=document.getElementById("app");
 const wk=new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
-let h=`<div class="hdr"><h1>LinkedIn <span>Delivery Pulse Check</span> 2026</h1><div class="hdr-r"><span class="wk">Week of ${wk}</span><button class="rst" onclick="if(confirm('Reset all data to defaults?')){data=JSON.parse(JSON.stringify(DD));sv();render();}">Reset</button></div></div>`;
+let h=`<div class="hdr"><h1>LinkedIn <span>Delivery Pulse Check</span> 2026</h1><div class="hdr-r"><button class="sync-btn" onclick="loadFromSheet()">↻ Refresh</button><span class="wk">Week of ${wk}</span></div></div>`;
 
 const tabs=[{id:"dash",l:"◉ Dashboard"},{id:"sales",l:"$ Sales Plays"},{id:"risks",l:"⚠ Risk Tracker"},
 {id:"Ankit",l:"Ankit",p:1},{id:"Charlie",l:"Charlie",p:1},{id:"Ryan",l:"Ryan",p:1},{id:"rec",l:"★ Recognition"},{id:"contracts",l:"📋 Contracts"}];
@@ -213,52 +285,34 @@ ap.innerHTML=h;
 }
 
 function renderDash(){
-const ap=allP(),avgs=HF.map(f=>av(ap,f)),ov=avgs.reduce((a,b)=>a+b,0)/avgs.length;
+const ap2=allP(),avgs=HF.map(f=>av(ap2,f)),ov=avgs.reduce((a,b)=>a+b,0)/avgs.length;
 const rc={High:0,Medium:0,Low:0};data.riskTracker.forEach(r=>{if(r.desc&&r.level)rc[r.level]++;});
 const tR=data.riskTracker.filter(r=>r.desc).length;
-
-// Contract alerts
-const alerts=data.contracts.filter(c=>!c.renewed).map(c=>{const u=ctrUrgency(c);return{...c,...u};}).filter(a=>a.days<=90).sort((a,b)=>(a.days||0)-(b.days||0));
-
+const alerts=data.contracts.filter(c=>!c.renewed).map(c=>({...c,...ctrUrgency(c)})).filter(a=>a.days<=90).sort((a,b)=>a.days-b.days);
 let h="";
-
-// Contract alerts at top
 if(alerts.length){
 h+=`<div class="card" style="border-left:4px solid var(--red);margin-bottom:14px"><div class="ct"><span class="dot" style="background:var(--red)"></span>Contract Alerts</div>`;
 alerts.forEach(a=>{
-  const daysText=a.days<0?`${Math.abs(a.days)} days past expiration`:a.days===0?"Expires today!":`${a.days} days remaining`;
-  h+=`<div class="alert ${a.cls}"><div class="alert-icon">${a.icon}</div><div class="alert-body"><div class="alert-title">${esc(a.name)}</div><div class="alert-sub">${daysText} · Ends ${a.end} · Owner: ${esc(a.owner)}</div></div></div>`;
-});
-h+=`</div>`;}
-
+const dt=a.days<0?Math.abs(a.days)+" days past expiration":a.days===0?"Expires today!":a.days+" days remaining";
+h+=`<div class="alert ${a.cls}"><div class="alert-icon">${a.icon}</div><div class="alert-body"><div class="alert-title">${esc(a.name)}</div><div class="alert-sub">${dt} · Ends ${a.end} · Owner: ${esc(a.owner)}</div></div></div>`;
+});h+=`</div>`;}
 h+=`<div class="grid4">`;
-[["Account Health",ov.toFixed(2),scr(ov),`of 3.00 · ${ap.length} projects`],
-["Projects",ap.length,"#2563eb","across 3 leads"],
-["Active Risks",tR,"#dc2626",`${rc.High}H · ${rc.Medium}M · ${rc.Low}L`],
-["Sales Opps",data.salesPlays.length,"#059669","tracked opportunities"]].forEach(([l,v,c,s])=>{
-h+=`<div class="card"><div class="sl">${l}</div><div class="sv" style="color:${c}">${v}</div><div class="ss">${s}</div></div>`;
-});
-h+=`</div>`;
-
-h+=`<div class="grid2"><div class="card"><div class="ct"><span class="dot" style="background:var(--acc)"></span>Health by Category</div>`;
+[["Account Health",ov.toFixed(2),scr(ov),`of 3.00 · ${ap2.length} projects`],["Projects",ap2.length,"#2563eb","across 3 leads"],["Active Risks",tR,"#dc2626",`${rc.High}H · ${rc.Medium}M · ${rc.Low}L`],["Sales Opps",data.salesPlays.length,"#059669","tracked"]].forEach(([l,v,c,s])=>{
+h+=`<div class="card"><div class="sl">${l}</div><div class="sv" style="color:${c}">${v}</div><div class="ss">${s}</div></div>`;});
+h+=`</div><div class="grid2"><div class="card"><div class="ct"><span class="dot" style="background:var(--acc)"></span>Health by Category</div>`;
 HF.forEach((f,i)=>{const v=avgs[i],pct=Math.round(v/3*100);
-h+=`<div class="bar-row"><div class="bar-lbl">${HL[i]}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${scr(v)}">${v.toFixed(2)}</div></div></div>`;
-});
+h+=`<div class="bar-row"><div class="bar-lbl">${HL[i]}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${scr(v)}">${v.toFixed(2)}</div></div></div>`;});
 h+=`</div><div class="card"><div class="ct"><span class="dot" style="background:var(--red)"></span>Risk Summary</div>`;
-["High","Medium","Low"].forEach(l=>{const cnt=rc[l]||0;const col=l==="High"?"#dc2626":l==="Medium"?"#d97706":"#059669";
-const pct=tR?Math.max(cnt/tR*100,cnt?8:0):0;
-h+=`<div class="bar-row"><div class="bar-lbl">${l}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${col}">${cnt}</div></div></div>`;
-});
+["High","Medium","Low"].forEach(l=>{const cnt=rc[l]||0;const col=l==="High"?"#dc2626":l==="Medium"?"#d97706":"#059669";const pct=tR?Math.max(cnt/tR*100,cnt?8:0):0;
+h+=`<div class="bar-row"><div class="bar-lbl">${l}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${col}">${cnt}</div></div></div>`;});
 h+=`</div></div>`;
-
 PPL.forEach(p=>{const d2=data.people[p],pa=HF.map(f=>av(d2.projects,f));
 h+=`<div class="card click" onclick="setTab('${p}')"><div class="ct"><span class="dot" style="background:var(--prp)"></span>${p}'s Workstreams (${d2.projects.length})<span style="margin-left:auto;font-size:11px;color:var(--acc)">Edit →</span></div><div class="hg">`;
 HF.forEach((f,i)=>{h+=`<div class="hi"><span class="l">${HL[i]}</span><span class="v" style="color:${scc(pa[i])}">${pa[i].toFixed(1)}</span></div>`;});
 h+=`</div>`;
 const hots=d2.projects.filter(x=>x.hot);
 if(hots.length){h+=`<div style="margin-top:8px">`;hots.forEach(x=>{h+=`<div class="hot-item"><span class="hot-dot">●</span><strong style="color:var(--dim)">${esc(x.name)}:</strong> ${esc(x.hot)}</div>`;});h+=`</div>`;}
-h+=`</div>`;
-});
+h+=`</div>`;});
 return h;
 }
 
@@ -266,18 +320,11 @@ function renderPerson(who){
 const d2=data.people[who],pa=HF.map(f=>av(d2.projects,f));
 let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--prp)"></span>${who}'s Health Overview</div><div class="hg">`;
 HF.forEach((f,i)=>{h+=`<div class="hi"><span class="l">${HL[i]}</span><span class="v" style="color:${scc(pa[i])}">${pa[i].toFixed(2)}</span></div>`;});
-h+=`</div></div>`;
-
-h+=`<div class="card"><div class="ct"><span class="dot" style="background:var(--acc)"></span>Projects (${d2.projects.length})</div><div style="overflow-x:auto"><table><thead><tr>`;
-h+=`<th>Project</th><th>LI Partner</th><th>DL</th>`;
+h+=`</div></div><div class="card"><div class="ct"><span class="dot" style="background:var(--acc)"></span>Projects (${d2.projects.length})</div><div style="overflow-x:auto"><table><thead><tr><th>Project</th><th>LI Partner</th><th>DL</th>`;
 HL.forEach(l=>{h+=`<th style="text-align:center;min-width:48px">${l}</th>`;});
-h+=`<th>Updated</th><th>Hot Topics</th>`;
-h+=`<th class="grp-risk">Risk</th><th class="grp-risk">Mitigation</th><th class="grp-risk">Mit. Due</th>`;
-h+=`<th class="grp-sales">Sales Plays</th><th>Notes</th><th></th></tr></thead><tbody>`;
-
+h+=`<th>Updated</th><th>Hot Topics</th><th class="grp-risk">Risk</th><th class="grp-risk">Mitigation</th><th class="grp-risk">Mit. Due</th><th class="grp-sales">Sales Plays</th><th>Notes</th><th></th></tr></thead><tbody>`;
 d2.projects.forEach((p,i)=>{
-h+=`<tr>`;
-h+=`<td><input class="ei" value="${esc(p.name)}" onchange="uP('${who}',${i},'name',this.value)" style="min-width:130px"></td>`;
+h+=`<tr><td><input class="ei" value="${esc(p.name)}" onchange="uP('${who}',${i},'name',this.value)" style="min-width:130px"></td>`;
 h+=`<td><input class="ei" value="${esc(p.lp)}" onchange="uP('${who}',${i},'lp',this.value)" style="min-width:80px"></td>`;
 h+=`<td><input class="ei" value="${esc(p.dl)}" onchange="uP('${who}',${i},'dl',this.value)" style="min-width:80px"></td>`;
 HF.forEach(f=>{h+=`<td style="text-align:center"><select class="sc-sel" style="background:${scbg(p[f])};color:${scr(p[f])}" onchange="uP('${who}',${i},'${f}',+this.value)"><option value="1"${p[f]===1?" selected":""}>1</option><option value="2"${p[f]===2?" selected":""}>2</option><option value="3"${p[f]===3?" selected":""}>3</option></select></td>`;});
@@ -288,8 +335,7 @@ h+=`<td class="grp-risk"><textarea class="ei" onchange="uP('${who}',${i},'mit',t
 h+=`<td class="grp-risk"><input type="date" class="date-in" value="${esc(p.mitDue)}" onchange="uP('${who}',${i},'mitDue',this.value)"></td>`;
 h+=`<td class="grp-sales"><textarea class="ei" onchange="uP('${who}',${i},'sales',this.value)" style="min-width:110px">${esc(p.sales)}</textarea></td>`;
 h+=`<td><textarea class="ei" onchange="uP('${who}',${i},'notes',this.value)" style="min-width:80px">${esc(p.notes)}</textarea></td>`;
-h+=`<td><button class="del-btn" onclick="rP('${who}',${i})">✕</button></td></tr>`;
-});
+h+=`<td><button class="del-btn" onclick="rP('${who}',${i})">✕</button></td></tr>`;});
 h+=`</tbody></table></div><button class="add-btn" onclick="aP('${who}')">+ Add Project</button></div>`;
 h+=`<div class="legend"><span><span class="legend-dot" style="background:var(--grn-bg);color:var(--grn)">3</span>Healthy</span><span><span class="legend-dot" style="background:var(--yel-bg);color:var(--yel)">2</span>Attention</span><span><span class="legend-dot" style="background:var(--red-bg);color:var(--red)">1</span>At Risk</span></div>`;
 return h;
@@ -297,7 +343,7 @@ return h;
 
 function renderSales(){
 let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--grn)"></span>Sales Plays Tracker</div>`;
-h+=`<div style="font-size:11px;color:var(--dim);margin-bottom:10px">Sales from workstream tabs sync here automatically. You can also add manually.</div>`;
+h+=`<div style="font-size:11px;color:var(--dim);margin-bottom:10px">Sales from workstream tabs sync here automatically.</div>`;
 h+=`<div style="overflow-x:auto"><table><thead><tr><th>Owner</th><th>Project</th><th>Opportunity</th><th>Description</th><th>Status</th><th>Next Steps</th><th>Notes</th><th>Updated</th><th></th></tr></thead><tbody>`;
 if(!data.salesPlays.length){h+=`<tr><td colspan="9" style="color:var(--dim)">No sales plays yet</td></tr>`;}
 else{data.salesPlays.forEach((sp,i)=>{
@@ -311,8 +357,7 @@ h+=`</select></td>`;
 h+=`<td><textarea class="ei" onchange="uSP(${i},'next',this.value)" style="min-width:100px">${esc(sp.next)}</textarea></td>`;
 h+=`<td><textarea class="ei" onchange="uSP(${i},'notes',this.value)" style="min-width:90px">${esc(sp.notes)}</textarea></td>`;
 h+=`<td><span class="upd-badge">${esc(sp.lastUpd)||"—"}</span></td>`;
-h+=`<td><button class="del-btn" onclick="rSP(${i})">✕</button></td></tr>`;
-});}
+h+=`<td><button class="del-btn" onclick="rSP(${i})">✕</button></td></tr>`;});}
 h+=`</tbody></table></div><button class="add-btn" onclick="aSP()">+ Add Sales Play</button></div>`;
 return h;
 }
@@ -331,91 +376,76 @@ h+=`<td><textarea class="ei" onchange="uR(${i},'impact',this.value)" style="min-
 h+=`<td><textarea class="ei" onchange="uR(${i},'mitigation',this.value)" style="min-width:120px">${esc(r.mitigation)}</textarea></td>`;
 h+=`<td><input type="date" class="date-in" value="${esc(r.mitDue)}" onchange="uR(${i},'mitDue',this.value)"></td>`;
 h+=`<td><textarea class="ei" onchange="uR(${i},'notes',this.value)">${esc(r.notes)}</textarea></td>`;
-h+=`<td><button class="del-btn" onclick="rR(${i})">✕</button></td></tr>`;
-});
+h+=`<td><button class="del-btn" onclick="rR(${i})">✕</button></td></tr>`;});
 h+=`</tbody></table></div><button class="add-btn" onclick="aR()">+ Add Risk</button></div>`;
 return h;
 }
 
 function renderContracts(){
-const sorted=[...data.contracts].sort((a,b)=>{
-  if(a.renewed&&!b.renewed)return 1;if(!a.renewed&&b.renewed)return -1;
-  return daysBetween(today(),a.end)-daysBetween(today(),b.end);
-});
+const sorted=[...data.contracts].sort((a,b)=>{if(a.renewed&&!b.renewed)return 1;if(!a.renewed&&b.renewed)return -1;return daysBetween(today(),a.end)-daysBetween(today(),b.end);});
 let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--acc)"></span>Contract Tracker</div>`;
-h+=`<div style="font-size:11px;color:var(--dim);margin-bottom:14px">Track contract end dates. Alerts appear on the Dashboard when contracts are within 90 days of expiration.</div></div>`;
-
+h+=`<div style="font-size:11px;color:var(--dim);margin-bottom:10px">Alerts appear on Dashboard when contracts are within 90 days of expiration.</div>`;
 h+=`<div style="overflow-x:auto"><table><thead><tr><th style="width:30px"></th><th>Contract Name</th><th>Owner</th><th>Start Date</th><th>End Date</th><th style="text-align:center">Days Left</th><th style="min-width:80px">Progress</th><th>Notes</th><th style="text-align:center">Renewed</th><th></th></tr></thead><tbody>`;
-sorted.forEach((c,si)=>{
-const i=data.contracts.findIndex(x=>x.id===c.id);
-const u=ctrUrgency(c);
+sorted.forEach(c=>{
+const i=data.contracts.findIndex(x=>x.id===c.id);const u=ctrUrgency(c);
 const days=c.renewed?null:daysBetween(today(),c.end);
-const totalDays=daysBetween(c.start,c.end);
-const elapsed=daysBetween(c.start,today());
+const totalDays=daysBetween(c.start,c.end);const elapsed=daysBetween(c.start,today());
 const pct=Math.min(Math.max(elapsed/totalDays*100,0),100);
 const daysText=c.renewed?"—":days<0?Math.abs(days)+" past":days===0?"Today!":days+"d";
-const daysColor=c.renewed?"var(--grn)":u.color;
-h+=`<tr>`;
-h+=`<td style="text-align:center;font-size:15px">${c.renewed?"✅":u.icon}</td>`;
+h+=`<tr><td style="text-align:center;font-size:15px">${c.renewed?"✅":u.icon}</td>`;
 h+=`<td><input class="ei" value="${esc(c.name)}" onchange="uCtr(${i},'name',this.value)" style="min-width:160px;font-weight:600"></td>`;
 h+=`<td><input class="ei" value="${esc(c.owner)}" onchange="uCtr(${i},'owner',this.value)" style="min-width:80px"></td>`;
 h+=`<td><input type="date" class="date-in" value="${esc(c.start)}" onchange="uCtr(${i},'start',this.value)"></td>`;
 h+=`<td><input type="date" class="date-in" value="${esc(c.end)}" onchange="uCtr(${i},'end',this.value)"></td>`;
-h+=`<td style="text-align:center;font-weight:700;color:${daysColor};white-space:nowrap">${daysText}</td>`;
+h+=`<td style="text-align:center;font-weight:700;color:${c.renewed?"var(--grn)":u.color};white-space:nowrap">${daysText}</td>`;
 h+=`<td><div class="ctr-bar"><div class="ctr-bar-fill" style="width:${pct}%;background:${u.color}"></div></div></td>`;
 h+=`<td><textarea class="ei" onchange="uCtr(${i},'notes',this.value)" style="min-width:100px">${esc(c.notes)}</textarea></td>`;
-h+=`<td style="text-align:center"><button onclick="toggleRenew(${i})" class="ctr-renew" style="background:${c.renewed?"var(--grn-bg)":"var(--sf2)"};color:${c.renewed?"var(--grn)":"var(--dim)"};border:1px solid ${c.renewed?"#a7f3d0":"var(--bd)"};cursor:pointer">${c.renewed?"✓ Yes":"No"}</button></td>`;
-h+=`<td><button class="del-btn" onclick="rCtr(${i})">✕</button></td>`;
-h+=`</tr>`;
-});
-h+=`</tbody></table></div>`;
-h+=`<button class="add-btn" onclick="aCtr()">+ Add Contract</button></div>`;
+h+=`<td style="text-align:center"><button onclick="toggleRenew(${i})" class="ctr-renew" style="background:${c.renewed?"var(--grn-bg)":"var(--sf2)"};color:${c.renewed?"var(--grn)":"var(--dim)"};border:1px solid ${c.renewed?"#a7f3d0":"var(--bd)"}">${c.renewed?"✓ Yes":"No"}</button></td>`;
+h+=`<td><button class="del-btn" onclick="rCtr(${i})">✕</button></td></tr>`;});
+h+=`</tbody></table></div><button class="add-btn" onclick="aCtr()">+ Add Contract</button></div>`;
 return h;
 }
 
 function renderRec(){
 let h="";
-data.recognitions.forEach((r,i)=>{
-const exp=exRec[i];
+data.recognitions.forEach((r,i)=>{const exp=exRec[i];
 h+=`<div class="rec-card"><div class="rec-stripe" style="background:var(--yel)"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div><div style="font-weight:700;font-size:14px">★ ${esc(r.name)}</div><div style="font-size:11px;color:var(--dim)">${esc(r.from)}</div></div><div style="display:flex;gap:6px;align-items:center"><span style="font-size:10px;color:var(--dim);background:var(--sf2);padding:3px 8px;border-radius:12px">${esc(r.date)}</span><button class="del-btn" onclick="rRec(${i})">✕</button></div></div>`;
 h+=`<div style="font-size:12px;color:var(--dim);line-height:1.5;max-height:${exp?"none":"60px"};overflow:hidden">${esc(r.ctx)}</div>`;
-if(r.ctx.length>80)h+=`<button style="background:none;border:none;color:var(--acc);font-size:11px;cursor:pointer;margin-top:3px" onclick="exRec[${i}]=!exRec[${i}];render();">${exp?"Less":"More..."}</button>`;
-h+=`</div>`;
-});
+if((r.ctx||"").length>80)h+=`<button style="background:none;border:none;color:var(--acc);font-size:11px;cursor:pointer;margin-top:3px" onclick="exRec[${i}]=!exRec[${i}];render();">${exp?"Less":"More..."}</button>`;
+h+=`</div>`;});
 h+=`<div class="card"><div class="ct">Add Recognition</div><div style="display:grid;grid-template-columns:90px 130px 1fr;gap:8px"><input class="ei" id="rd" placeholder="Month" style="border:1px solid var(--bd);background:var(--sf2)"><input class="ei" id="rn" placeholder="Name" style="border:1px solid var(--bd);background:var(--sf2)"><input class="ei" id="rf" placeholder="From" style="border:1px solid var(--bd);background:var(--sf2)"></div><textarea class="ei" id="rc" placeholder="Context..." style="border:1px solid var(--bd);background:var(--sf2);margin-top:6px;min-height:50px"></textarea><button class="add-btn" onclick="addRec()">+ Add</button></div>`;
 return h;
 }
 
-// === MUTATIONS ===
-function uP(who,i,f,v){
-  data.people[who].projects[i][f]=v;
-  if(f!=="upd")data.people[who].projects[i].upd=today();
-  if(f==="risks"||f==="mit"||f==="mitDue"||f==="name"){syncRisks();syncMitBack(who,i);}
-  if(f==="sales"||f==="name"){syncSales();}
-  sv();if(HF.includes(f))render();
-}
-function aP(who){data.people[who].projects.push({id:uid(),name:"New Project",lp:"",dl:"",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:today(),hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""});sv();render();}
-function rP(who,i){if(!confirm("Remove this project?"))return;data.people[who].projects.splice(i,1);sv();render();}
+// ===== MUTATIONS =====
+function mut(){syncRisks();syncSales();queueSave();}
 
-function uR(i,f,v){data.riskTracker[i][f]=v;sv();}
-function aR(){data.riskTracker.push({id:uid(),owner:"",project:"",desc:"",level:"Medium",impact:"",mitigation:"",mitDue:"",notes:"",_src:""});sv();render();}
-function rR(i){if(!confirm("Remove?"))return;data.riskTracker.splice(i,1);sv();render();}
+function uP(who,i,f,v){data.people[who].projects[i][f]=v;if(f!=="upd")data.people[who].projects[i].upd=today();
+if(f==="risks"||f==="mit"||f==="mitDue"||f==="name"){syncMitBack(who,i);}
+mut();if(HF.includes(f))render();}
+function aP(who){data.people[who].projects.push({id:uid(),name:"New Project",lp:"",dl:"",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:today(),hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""});mut();render();}
+function rP(who,i){if(!confirm("Remove this project?"))return;data.people[who].projects.splice(i,1);mut();render();}
 
-function uSP(i,f,v){data.salesPlays[i][f]=v;data.salesPlays[i].lastUpd=today();sv();}
-function aSP(){data.salesPlays.push({id:uid(),owner:"",project:"",opp:"",desc:"",status:"Identified",next:"",notes:"",lastUpd:today(),_src:""});sv();render();}
-function rSP(i){if(!confirm("Remove?"))return;data.salesPlays.splice(i,1);sv();render();}
+function uR(i,f,v){data.riskTracker[i][f]=v;queueSave();}
+function aR(){data.riskTracker.push({id:uid(),owner:"",project:"",desc:"",level:"Medium",impact:"",mitigation:"",mitDue:"",notes:"",_src:""});mut();render();}
+function rR(i){if(!confirm("Remove?"))return;data.riskTracker.splice(i,1);mut();render();}
 
-function aCtr(){
-  data.contracts.push({id:uid(),name:"New Contract",owner:"",start:today(),end:"",renewed:false,notes:""});sv();render();
-}
-function uCtr(i,f,v){data.contracts[i][f]=v;sv();}
-function rCtr(i){if(!confirm("Remove this contract?"))return;data.contracts.splice(i,1);sv();render();}
-function toggleRenew(i){data.contracts[i].renewed=!data.contracts[i].renewed;sv();render();}
+function uSP(i,f,v){data.salesPlays[i][f]=v;data.salesPlays[i].lastUpd=today();queueSave();}
+function aSP(){data.salesPlays.push({id:uid(),owner:"",project:"",opp:"",desc:"",status:"Identified",next:"",notes:"",lastUpd:today(),_src:""});mut();render();}
+function rSP(i){if(!confirm("Remove?"))return;data.salesPlays.splice(i,1);mut();render();}
 
-function addRec(){const d=document.getElementById("rd").value,n=document.getElementById("rn").value,f=document.getElementById("rf").value,c=document.getElementById("rc").value;if(!n||!c)return alert("Name & context required");data.recognitions.unshift({id:uid(),date:d,name:n,from:f,ctx:c});sv();render();}
-function rRec(i){if(!confirm("Remove?"))return;data.recognitions.splice(i,1);sv();render();}
+function uCtr(i,f,v){data.contracts[i][f]=v;queueSave();}
+function aCtr(){data.contracts.push({id:uid(),name:"New Contract",owner:"",start:today(),end:"",renewed:false,notes:""});mut();render();}
+function rCtr(i){if(!confirm("Remove?"))return;data.contracts.splice(i,1);mut();render();}
+function toggleRenew(i){data.contracts[i].renewed=!data.contracts[i].renewed;mut();render();}
 
-render();
+function addRec(){const d=document.getElementById("rd").value,n=document.getElementById("rn").value,f=document.getElementById("rf").value,c=document.getElementById("rc").value;if(!n||!c)return alert("Name & context required");data.recognitions.unshift({id:uid(),date:d,name:n,from:f,ctx:c});mut();render();}
+function rRec(i){if(!confirm("Remove?"))return;data.recognitions.splice(i,1);mut();render();}
+
+// ===== INIT =====
+loadFromSheet();
+// Auto-refresh every 30 seconds to pick up other people's changes
+setInterval(()=>{if(!saving)loadFromSheet();},30000);
 </script>
 </body>
 </html>
