@@ -87,6 +87,9 @@ tr:hover td.grp-sales{background:#f0faf4}
 .ctr-bar{height:6px;background:var(--sf2);border-radius:3px;margin-top:4px;overflow:hidden}
 .ctr-bar-fill{height:100%;border-radius:3px;transition:width .4s}
 .ctr-renew{font-size:10px;padding:3px 8px;border-radius:12px;font-weight:600;white-space:nowrap;cursor:pointer}
+tr.archived td{opacity:.45;background:#f9fafb}
+tr.archived:hover td{opacity:.65}
+.show-arch{font-size:11px;color:var(--acc);background:none;border:none;cursor:pointer;margin-left:auto;font-family:inherit}
 .loading{display:flex;align-items:center;justify-content:center;min-height:60vh;flex-direction:column;gap:12px;color:var(--dim)}
 .spinner{width:32px;height:32px;border:3px solid var(--bd);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -117,7 +120,7 @@ Ryan:{projects:[{id:"r1",name:"LinkedIn MIDA - Measurement",lp:"Zaid/Erica",dl:"
 {id:"r2",name:"LTV Work",lp:"Licurgo",dl:"David Salcedo",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"2026-03-17",hot:"Bug found in NN build",risks:"",mit:"Zaid and Paolo rescoping project",mitDue:"",sales:"CRM lifecycle workshop",notes:""},
 {id:"r3",name:"Incremental Testing",lp:"Faye",dl:"Ryan Ottino",contracts:3,financials:3,delivery:3,blendTeam:3,clientSat:3,engagement:3,upd:"",hot:"",risks:"",mit:"",mitDue:"",sales:"",notes:""}]}
 },
-riskTracker:[{id:"rk1",owner:"Charlie",project:"",desc:"Possible Attrition - XYZ",level:"High",impact:"Affects Project Delivery",mitigation:"KT/Documentation etc",mitDue:"",notes:"",_src:""}],
+riskTracker:[{id:"rk1",owner:"Charlie",project:"",desc:"Possible Attrition - XYZ",level:"High",impact:"Affects Project Delivery",mitigation:"KT/Documentation etc",mitDue:"",notes:"",_src:"",status:"Active",created:"2026-03-17",archived:false}],
 salesPlays:[],
 contracts:[{id:"ct1",name:"LinkedIn CGI FY26 CO2",owner:"Charlie",start:"2025-07-01",end:"2026-06-30",renewed:false,notes:""},
 {id:"ct2",name:"LTS BI FY2025Q1 (Ileana) CO7",owner:"Charlie",start:"2025-02-21",end:"2026-02-20",renewed:false,notes:""},
@@ -134,8 +137,8 @@ function toSheetFormat(){
     Ankit:data.people.Ankit.projects,
     Charlie:data.people.Charlie.projects,
     Ryan:data.people.Ryan.projects,
-    Risks:data.riskTracker,
-    Sales:data.salesPlays,
+    Risks:data.riskTracker.map(r=>({...r,archived:r.archived?"TRUE":"FALSE"})),
+    Sales:data.salesPlays.map(s=>({...s,archived:s.archived?"TRUE":"FALSE"})),
     Contracts:data.contracts.map(c=>({...c,renewed:c.renewed?"TRUE":"FALSE"})),
     Recognitions:data.recognitions
   };
@@ -169,8 +172,8 @@ function fromSheetFormat(d){
       });
     }
   });
-  if(d.Risks)out.riskTracker=d.Risks.map(r=>{if(!r.id)r.id=uid();RISK_DATES.forEach(f=>{r[f]=fixDate(r[f]);});return r;});
-  if(d.Sales)out.salesPlays=d.Sales.map(r=>{if(!r.id)r.id=uid();SALES_DATES.forEach(f=>{r[f]=fixDate(r[f]);});return r;});
+  if(d.Risks)out.riskTracker=d.Risks.map(r=>{if(!r.id)r.id=uid();RISK_DATES.forEach(f=>{r[f]=fixDate(r[f]);});r.created=fixDate(r.created);r.archived=(r.archived==="TRUE"||r.archived===true);if(!r.status)r.status="Active";return r;});
+  if(d.Sales)out.salesPlays=d.Sales.map(r=>{if(!r.id)r.id=uid();SALES_DATES.forEach(f=>{r[f]=fixDate(r[f]);});r.created=fixDate(r.created);r.archived=(r.archived==="TRUE"||r.archived===true);if(!r.status)r.status="New";return r;});
   if(d.Contracts)out.contracts=d.Contracts.map(r=>{if(!r.id)r.id=uid();r.renewed=(r.renewed==="TRUE"||r.renewed===true);CTR_DATES.forEach(f=>{r[f]=fixDate(r[f]);});return r;});
   if(d.Recognitions)out.recognitions=d.Recognitions.map(r=>{if(!r.id)r.id=uid();return r;});
   return out;
@@ -249,7 +252,7 @@ function syncRisks(){
     if(!p.risks||!p.risks.trim())return;
     const srcKey=who+"|"+p.id;
     let ex=data.riskTracker.find(r=>r._src===srcKey);
-    if(!ex){data.riskTracker.push({id:uid(),owner:who,project:p.name,desc:p.risks,level:"Medium",impact:"",mitigation:p.mit||"",mitDue:p.mitDue||"",notes:"",_src:srcKey});}
+    if(!ex){data.riskTracker.push({id:uid(),owner:who,project:p.name,desc:p.risks,status:"Active",level:"Medium",impact:"",mitigation:p.mit||"",mitDue:p.mitDue||"",notes:"",_src:srcKey,created:today(),archived:false});}
     else{ex.desc=p.risks;ex.project=p.name;ex.mitigation=p.mit||ex.mitigation;ex.mitDue=p.mitDue||ex.mitDue;}
   });});
 }
@@ -258,7 +261,7 @@ function syncSales(){
     if(!p.sales||!p.sales.trim())return;
     const srcKey=who+"|"+p.id+"|sales";
     let ex=data.salesPlays.find(s=>s._src===srcKey);
-    if(!ex){data.salesPlays.push({id:uid(),owner:who,project:p.name,opp:p.sales,desc:"",status:"Identified",next:"",notes:"",lastUpd:p.upd||today(),_src:srcKey});}
+    if(!ex){data.salesPlays.push({id:uid(),owner:who,project:p.name,opp:p.sales,desc:"",status:"New",next:"",notes:"",lastUpd:p.upd||today(),_src:srcKey,created:today(),archived:false});}
     else{ex.opp=p.sales;ex.project=p.name;ex.lastUpd=p.upd||today();}
   });});
 }
@@ -359,42 +362,72 @@ return h;
 }
 
 function renderSales(){
-let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--grn)"></span>Sales Plays Tracker</div>`;
+const active=data.salesPlays.filter(s=>!s.archived);
+const archived=data.salesPlays.filter(s=>s.archived);
+let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--grn)"></span>Sales Plays Tracker (${active.length} active)</div>`;
 h+=`<div style="font-size:11px;color:var(--dim);margin-bottom:10px">Sales from workstream tabs sync here automatically.</div>`;
-h+=`<div style="overflow-x:auto"><table><thead><tr><th>Owner</th><th>Project</th><th>Opportunity</th><th>Description</th><th>Status</th><th>Next Steps</th><th>Notes</th><th>Updated</th><th></th></tr></thead><tbody>`;
-if(!data.salesPlays.length){h+=`<tr><td colspan="9" style="color:var(--dim)">No sales plays yet</td></tr>`;}
-else{data.salesPlays.forEach((sp,i)=>{
+h+=`<div style="overflow-x:auto"><table><thead><tr><th>Owner</th><th>Project</th><th>Opportunity</th><th>Description</th><th>Status</th><th>Next Steps</th><th>Notes</th><th>Created</th><th>Updated</th><th></th></tr></thead><tbody>`;
+if(!active.length){h+=`<tr><td colspan="10" style="color:var(--dim)">No active sales plays</td></tr>`;}
+else{active.forEach((sp)=>{
+const i=data.salesPlays.indexOf(sp);
 h+=`<tr><td><input class="ei" value="${esc(sp.owner)}" onchange="uSP(${i},'owner',this.value)" style="min-width:70px"></td>`;
 h+=`<td><input class="ei" value="${esc(sp.project)}" onchange="uSP(${i},'project',this.value)" style="min-width:100px"></td>`;
 h+=`<td><input class="ei" value="${esc(sp.opp)}" onchange="uSP(${i},'opp',this.value)" style="min-width:120px"></td>`;
 h+=`<td><textarea class="ei" onchange="uSP(${i},'desc',this.value)" style="min-width:100px">${esc(sp.desc)}</textarea></td>`;
-h+=`<td><select class="ei" style="width:110px" onchange="uSP(${i},'status',this.value)">`;
-["Identified","In Progress","Proposal Sent","Won","Lost"].forEach(st=>{h+=`<option${sp.status===st?" selected":""}>${st}</option>`;});
+h+=`<td><select class="ei" style="width:120px" onchange="uSP(${i},'status',this.value)">`;
+["New","Active","In HubSpot","Closed Won","Closed Lost"].forEach(st=>{h+=`<option${sp.status===st?" selected":""}>${st}</option>`;});
 h+=`</select></td>`;
 h+=`<td><textarea class="ei" onchange="uSP(${i},'next',this.value)" style="min-width:100px">${esc(sp.next)}</textarea></td>`;
 h+=`<td><textarea class="ei" onchange="uSP(${i},'notes',this.value)" style="min-width:90px">${esc(sp.notes)}</textarea></td>`;
+h+=`<td><span class="upd-badge">${esc(sp.created)||"—"}</span></td>`;
 h+=`<td><span class="upd-badge">${esc(sp.lastUpd)||"—"}</span></td>`;
-h+=`<td><button class="del-btn" onclick="rSP(${i})">✕</button></td></tr>`;});}
+h+=`<td style="white-space:nowrap"><button title="Archive" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:13px" onclick="archSP(${i})">📦</button><button class="del-btn" onclick="rSP(${i})">✕</button></td></tr>`;});}
 h+=`</tbody></table></div><button class="add-btn" onclick="aSP()">+ Add Sales Play</button></div>`;
+if(archived.length){
+h+=`<div class="card"><div class="ct" style="cursor:pointer" onclick="toggleArchSales()"><span class="dot" style="background:var(--dim)"></span>Archived Sales Plays (${archived.length})<button class="show-arch" id="arch-sales-btn">${window._showArchSales?"Hide":"Show"}</button></div>`;
+if(window._showArchSales){
+h+=`<div style="overflow-x:auto"><table><thead><tr><th>Owner</th><th>Project</th><th>Opportunity</th><th>Status</th><th>Created</th><th>Updated</th><th></th></tr></thead><tbody>`;
+archived.forEach(sp=>{const i=data.salesPlays.indexOf(sp);
+h+=`<tr class="archived"><td>${esc(sp.owner)}</td><td>${esc(sp.project)}</td><td>${esc(sp.opp)}</td><td>${esc(sp.status)}</td><td><span class="upd-badge">${esc(sp.created)||"—"}</span></td><td><span class="upd-badge">${esc(sp.lastUpd)||"—"}</span></td>`;
+h+=`<td style="white-space:nowrap"><button title="Restore" style="background:none;border:none;color:var(--acc);cursor:pointer;font-size:13px" onclick="unarchSP(${i})">↩</button><button class="del-btn" onclick="rSP(${i})">✕</button></td></tr>`;});
+h+=`</tbody></table></div>`;}
+h+=`</div>`;}
 return h;
 }
 
 function renderRisks(){
-let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--red)"></span>Risk Tracker</div>`;
+const active=data.riskTracker.filter(r=>!r.archived);
+const archived=data.riskTracker.filter(r=>r.archived);
+let h=`<div class="card"><div class="ct"><span class="dot" style="background:var(--red)"></span>Risk Tracker (${active.length} active)</div>`;
 h+=`<div style="font-size:11px;color:var(--dim);margin-bottom:10px">Risks from workstream tabs sync here. Mitigation and due dates stay in sync.</div>`;
-h+=`<div style="overflow-x:auto"><table><thead><tr><th>Owner</th><th>Project</th><th>Description</th><th>Level</th><th>Impact</th><th>Mitigation</th><th>Mit. Due</th><th>Notes</th><th></th></tr></thead><tbody>`;
-data.riskTracker.forEach((r,i)=>{
+h+=`<div style="overflow-x:auto"><table><thead><tr><th>Owner</th><th>Project</th><th>Description</th><th>Status</th><th>Level</th><th>Impact</th><th>Mitigation</th><th>Mit. Due</th><th>Notes</th><th>Created</th><th></th></tr></thead><tbody>`;
+if(!active.length){h+=`<tr><td colspan="11" style="color:var(--dim)">No active risks</td></tr>`;}
+else{active.forEach(r=>{
+const i=data.riskTracker.indexOf(r);
 const lv=r.level==="High"?1:r.level==="Medium"?2:3;
 h+=`<tr><td><input class="ei" value="${esc(r.owner)}" onchange="uR(${i},'owner',this.value)" style="min-width:70px"></td>`;
 h+=`<td><input class="ei" value="${esc(r.project)}" onchange="uR(${i},'project',this.value)" style="min-width:100px"></td>`;
 h+=`<td><textarea class="ei" onchange="uR(${i},'desc',this.value)" style="min-width:150px">${esc(r.desc)}</textarea></td>`;
+h+=`<td><select class="ei" style="width:130px" onchange="uR(${i},'status',this.value)">`;
+["Identified","Active","Resolved","Closed Unresolved"].forEach(st=>{h+=`<option${(r.status||"Active")===st?" selected":""}>${st}</option>`;});
+h+=`</select></td>`;
 h+=`<td><select class="sc-sel" style="width:82px;background:${scbg(lv)};color:${scr(lv)}" onchange="uR(${i},'level',this.value)"><option${r.level==="High"?" selected":""}>High</option><option${r.level==="Medium"?" selected":""}>Medium</option><option${r.level==="Low"?" selected":""}>Low</option></select></td>`;
 h+=`<td><textarea class="ei" onchange="uR(${i},'impact',this.value)" style="min-width:110px">${esc(r.impact)}</textarea></td>`;
 h+=`<td><textarea class="ei" onchange="uR(${i},'mitigation',this.value)" style="min-width:120px">${esc(r.mitigation)}</textarea></td>`;
 h+=`<td><input type="date" class="date-in" value="${esc(r.mitDue)}" onchange="uR(${i},'mitDue',this.value)"></td>`;
 h+=`<td><textarea class="ei" onchange="uR(${i},'notes',this.value)">${esc(r.notes)}</textarea></td>`;
-h+=`<td><button class="del-btn" onclick="rR(${i})">✕</button></td></tr>`;});
+h+=`<td><span class="upd-badge">${esc(r.created)||"—"}</span></td>`;
+h+=`<td style="white-space:nowrap"><button title="Archive" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:13px" onclick="archR(${i})">📦</button><button class="del-btn" onclick="rR(${i})">✕</button></td></tr>`;});}
 h+=`</tbody></table></div><button class="add-btn" onclick="aR()">+ Add Risk</button></div>`;
+if(archived.length){
+h+=`<div class="card"><div class="ct" style="cursor:pointer" onclick="toggleArchRisks()"><span class="dot" style="background:var(--dim)"></span>Archived Risks (${archived.length})<button class="show-arch" id="arch-risks-btn">${window._showArchRisks?"Hide":"Show"}</button></div>`;
+if(window._showArchRisks){
+h+=`<div style="overflow-x:auto"><table><thead><tr><th>Owner</th><th>Project</th><th>Description</th><th>Status</th><th>Level</th><th>Created</th><th></th></tr></thead><tbody>`;
+archived.forEach(r=>{const i=data.riskTracker.indexOf(r);
+h+=`<tr class="archived"><td>${esc(r.owner)}</td><td>${esc(r.project)}</td><td>${esc(r.desc)}</td><td>${esc(r.status)}</td><td>${esc(r.level)}</td><td><span class="upd-badge">${esc(r.created)||"—"}</span></td>`;
+h+=`<td style="white-space:nowrap"><button title="Restore" style="background:none;border:none;color:var(--acc);cursor:pointer;font-size:13px" onclick="unarchR(${i})">↩</button><button class="del-btn" onclick="rR(${i})">✕</button></td></tr>`;});
+h+=`</tbody></table></div>`;}
+h+=`</div>`;}
 return h;
 }
 
@@ -444,12 +477,20 @@ function aP(who){data.people[who].projects.push({id:uid(),name:"New Project",lp:
 function rP(who,i){if(!confirm("Remove this project?"))return;data.people[who].projects.splice(i,1);mut();render();}
 
 function uR(i,f,v){data.riskTracker[i][f]=v;queueSave();}
-function aR(){data.riskTracker.push({id:uid(),owner:"",project:"",desc:"",level:"Medium",impact:"",mitigation:"",mitDue:"",notes:"",_src:""});mut();render();}
+function aR(){data.riskTracker.push({id:uid(),owner:"",project:"",desc:"",status:"Identified",level:"Medium",impact:"",mitigation:"",mitDue:"",notes:"",_src:"",created:today(),archived:false});mut();render();}
 function rR(i){if(!confirm("Remove?"))return;data.riskTracker.splice(i,1);mut();render();}
+function archR(i){data.riskTracker[i].archived=true;mut();render();}
+function unarchR(i){data.riskTracker[i].archived=false;mut();render();}
+window._showArchRisks=false;
+function toggleArchRisks(){window._showArchRisks=!window._showArchRisks;render();}
 
 function uSP(i,f,v){data.salesPlays[i][f]=v;data.salesPlays[i].lastUpd=today();queueSave();}
-function aSP(){data.salesPlays.push({id:uid(),owner:"",project:"",opp:"",desc:"",status:"Identified",next:"",notes:"",lastUpd:today(),_src:""});mut();render();}
+function aSP(){data.salesPlays.push({id:uid(),owner:"",project:"",opp:"",desc:"",status:"New",next:"",notes:"",lastUpd:today(),_src:"",created:today(),archived:false});mut();render();}
 function rSP(i){if(!confirm("Remove?"))return;data.salesPlays.splice(i,1);mut();render();}
+function archSP(i){data.salesPlays[i].archived=true;mut();render();}
+function unarchSP(i){data.salesPlays[i].archived=false;mut();render();}
+window._showArchSales=false;
+function toggleArchSales(){window._showArchSales=!window._showArchSales;render();}
 
 function uCtr(i,f,v){data.contracts[i][f]=v;queueSave();}
 function aCtr(){data.contracts.push({id:uid(),name:"New Contract",owner:"",start:today(),end:"",renewed:false,notes:""});mut();render();}
